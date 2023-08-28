@@ -8,6 +8,7 @@ extends:
   - plugin:jsx-a11y/recommended
   - plugin:import/recommended
   - airbnb
+  - plugin:functional/recommended
 overrides: []
 parserOptions:
   ecmaVersion: latest
@@ -20,3 +21,17 @@ rules:
   no-console: 0
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
   react/react-in-jsx-scope: 0
+  functional/functional-parameters: 0
+  functional/no-try-statement: 0
+  functional/no-let: 0
+  functional/no-throw-statements: 0
+  functional/immutable-data: 0
+  functional/no-conditional-statements: 0
+  functional/no-expression-statements: 0
+  functional/prefer-immutable-types: 0
+  functional/type-declaration-immutability: 0
+  functional/no-classes: 0
+  functional/no-mixed-types: 0
+  functional/no-loop-statements: 0
+  functional/no-return-void: 0
+
