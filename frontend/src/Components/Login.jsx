@@ -1,15 +1,21 @@
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Image from 'react-bootstrap/Image';
+import {
+  Button, Form, Row, Col, Container, Image,
+} from 'react-bootstrap';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import axios from 'axios';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import authContext from '../contexts';
+import MainPage from './Main';
 
 function RegistrationForm() {
+  const auth = useContext(authContext);
+  const navigate = useNavigate();
+  const [isValidated, setValidated] = useState(true);
+
   const SignupSchema = Yup.object().shape({
-    name: Yup.string().min(3, 'Слишком короткий ник').required('Введите имя'),
+    username: Yup.string().min(3, 'Слишком короткий ник').required('Введите имя'),
     password: Yup.string().min(3, 'Слишком короткий пароль').required('Введите пароль'),
   });
 
@@ -17,10 +23,19 @@ function RegistrationForm() {
     <Formik
       validationSchema={SignupSchema}
       onSubmit={(values) => {
-        console.log(JSON.stringify(values, null, 2));
+        axios.post('/api/v1/login', values)
+          .then((response) => {
+            localStorage.setItem('token', response.data.token);
+            auth.logIn();
+            setValidated(true);
+            navigate('/');
+          })
+          .catch(() => {
+            setValidated(false);
+          });
       }}
       initialValues={{
-        name: '',
+        username: '',
         password: '',
       }}
     >
@@ -31,13 +46,13 @@ function RegistrationForm() {
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
-              name="name"
+              name="username"
               placeholder="Ваш ник"
-              value={values.name}
+              value={values.username}
               onChange={handleChange}
-              isInvalid={!!errors.name}
+              isInvalid={!!errors.username || !isValidated}
             />
-            <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
@@ -46,44 +61,23 @@ function RegistrationForm() {
               placeholder="Пароль"
               value={values.password}
               onChange={handleChange}
-              isInvalid={!!errors.password}
+              isInvalid={!!errors.password || !isValidated}
             />
             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
           </Form.Group>
           <Button variant="primary" type="submit">
             Войти
           </Button>
+          {!isValidated
+        && (
+        <p className="text-danger">
+          Неверные имя пользователя или пароль
+        </p>
+        )}
         </Form>
       )}
     </Formik>
   );
-/*
-  (
-    <Form onSubmit={formik.handleSubmit}>
-      <Form.Group className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="Ваш ник"
-          id="name"
-          onChange={formik.handleChange}
-          value={formik.values.name}
-        />
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Control
-          type="password"
-          placeholder="Пароль"
-          id="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Войти
-      </Button>
-    </Form>
-  );
-*/
 }
 
 function BuildPage() {
@@ -97,6 +91,9 @@ function BuildPage() {
           <h2>Войти</h2>
           <RegistrationForm />
         </Col>
+      </Row>
+      <Row>
+        <MainPage />
       </Row>
     </Container>
   );

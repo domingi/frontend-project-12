@@ -12,6 +12,6 @@
   "author": "Stanislav Gribanov",
   "license": "ISC",
   "dependencies": {
-    "@hexlet/chat-server": "^1.1.6"
+    "@hexlet/chat-server": "^1.1.8"
   }
 }
