@@ -7,7 +7,17 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authContext from '../contexts';
-import MainPage from './Main';
+
+function AuthCheck() {
+  if (localStorage.getItem('token')) {
+    return (
+      <button type="button" onClick={() => { localStorage.clear(); }}>
+        Очистить локал сторэйдж
+      </button>
+    );
+  }
+  return null;
+}
 
 function RegistrationForm() {
   const auth = useContext(authContext);
@@ -93,7 +103,7 @@ function BuildPage() {
         </Col>
       </Row>
       <Row>
-        <MainPage />
+        <AuthCheck />
       </Row>
     </Container>
   );
