@@ -5,10 +5,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Row, Col, Container, Button, Form, InputGroup,
+  Row, Col, Container, Form,
 } from 'react-bootstrap';
 import cn from 'classnames';
-import { setAll as setAllChannels, selectors } from '../slices/channelSlice';
+import { v4 as uuid } from 'uuid';
+import { actions as channelActions, selectors } from '../slices/channelSlice';
+import { Chat, MessageInput } from './Chatbox';
 
 function MainPage() {
   const dispatch = useDispatch();
@@ -38,7 +40,7 @@ function MainPage() {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       }).then((response) => {
         const channels = getNormalized(response.data);
-        dispatch(setAllChannels(channels));
+        dispatch(channelActions.setAll(channels));
         setCurrentChannelId(response.data.currentChannelId);
       });
     }
@@ -79,32 +81,51 @@ function GetChannels(currentChannelId, setCurrentChannelId) {
   );
 }
 
-function MessageInput() {
-  return (
-    <InputGroup className="mb-3">
-      <Form.Control
-        placeholder="Введите сообщение"
-        aria-label="Recipient's username"
-        aria-describedby="basic-addon2"
-      />
-      <Button variant="outline-secondary" id="button-addon2">
-        <i className="bi bi-arrow-right-square" />
-      </Button>
-    </InputGroup>
-  );
-}
-
-// eslint-disable-next-line react/prop-types
 function ChatUI({ currentChannelId, setCurrentChannelId, currentChannel }) {
+  const [newChannel, setNewChannel] = useState('');
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(newChannel);
+    dispatch(channelActions.addOne({ id: uuid(), name: newChannel }));
+  };
+
   return (
     <Container className="m-5">
-      <Row className="justify-content-md-center h-100">
+      <Row className="justify-content-md-center">
         <Col xs={2} className="bg-secondary-subtle">
           <div className="d-flex justify-content-between align-items-center p-2">
             <b>Каналы</b>
-            <button type="button" className="btn btn-link">
+            <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target="#addChannel">
               <i className="bi bi-plus-square" />
             </button>
+          </div>
+          <div className="modal fade" id="addChannel" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h1 className="modal-title fs-5" id="exampleModalLabel">Добавить канал</h1>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+                </div>
+                <Form onSubmit={handleSubmit}>
+                  <div className="modal-body">
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                      <Form.Control
+                        type="text"
+                        placeholder="Название канала..."
+                        value={newChannel}
+                        onChange={(e) => setNewChannel(e.target.value)}
+                      />
+                    </Form.Group>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Отменить</button>
+                    <button type="submit" className="btn btn-primary">Добавить</button>
+                  </div>
+                </Form>
+              </div>
+            </div>
           </div>
           <Row>
             <Col className="p-2">
@@ -124,12 +145,12 @@ function ChatUI({ currentChannelId, setCurrentChannelId, currentChannel }) {
           </Row>
           <Row>
             <Col>
-              окно с сообщениями
+              <Chat currentChannelId={currentChannelId} />
             </Col>
           </Row>
           <Row>
             <Col>
-              <MessageInput />
+              <MessageInput currentChannelId={currentChannelId} />
             </Col>
           </Row>
         </Col>

@@ -1,24 +1,17 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
-const initialState = {
-  channels: [],
-  messages: [],
-  currentChannelId: 10,
-};
+const messagesAdapter = createEntityAdapter();
 
-const chatsSlice = createSlice({
-  name: 'chats',
-  initialState,
+const messagesSlice = createSlice({
+  name: 'messages',
+  initialState: messagesAdapter.getInitialState(),
   reducers: {
-    merge: (state, action) => {
-      state = Object.assign(state, action.payload);
-    },
-    setCurrentChannelId: (state, action) => {
-      state.currentChannelId = action.payload;
-    },
+    setAll: messagesAdapter.setAll,
+    addOne: messagesAdapter.addOne,
   },
 });
 
-export const { merge, setCurrentChannelId } = chatsSlice.actions;
-export default chatsSlice.reducer;
+export const { actions } = messagesSlice;
+export const selectors = messagesAdapter.getSelectors((state) => state.messages);
+export default messagesSlice.reducer;

@@ -6,21 +6,10 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import authContext from '../contexts';
-
-function AuthCheck() {
-  if (localStorage.getItem('token')) {
-    return (
-      <button type="button" onClick={() => { localStorage.clear(); }}>
-        Очистить локал сторэйдж
-      </button>
-    );
-  }
-  return null;
-}
+import { AuthContext } from '../contexts';
 
 function RegistrationForm() {
-  const auth = useContext(authContext);
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isValidated, setValidated] = useState(true);
 
@@ -38,6 +27,8 @@ function RegistrationForm() {
             localStorage.setItem('token', response.data.token);
             auth.logIn();
             setValidated(true);
+            const { username } = values;
+            auth.setUser(username);
             navigate('/');
           })
           .catch(() => {
@@ -101,9 +92,6 @@ function BuildPage() {
           <h2>Войти</h2>
           <RegistrationForm />
         </Col>
-      </Row>
-      <Row>
-        <AuthCheck />
       </Row>
     </Container>
   );
