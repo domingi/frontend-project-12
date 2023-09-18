@@ -11,7 +11,6 @@ export function Chat({ currentChannelId }) {
   const messages = useSelector(selectors.selectAll);
   if (messages.length === 0) return null;
   const messagesForChannel = messages.filter(({ channelId }) => channelId === currentChannelId);
-  console.log(messagesForChannel);
   const list = Object.values(messagesForChannel)
     .map(({ id, body, user }) => (
       <p key={id}>
