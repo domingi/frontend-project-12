@@ -42,7 +42,7 @@ function MainPage() {
   return (
     <Container className="m-5">
       <Row className="justify-content-md-center">
-        <Col xs={2} className="bg-secondary-subtle">
+        <Col xs={2} className="bg-light-subtle shadow">
           <ChannelBox
             currentChannelId={currentChannelId}
             setCurrentChannelId={setCurrentChannelId}

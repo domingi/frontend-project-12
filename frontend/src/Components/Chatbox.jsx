@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useContext, useRef } from 'react';
+import React, {
+  useState, useContext, useRef, useEffect,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, InputGroup } from 'react-bootstrap';
 import { actions, selectors } from '../slices/messagesSlice';
@@ -26,11 +28,15 @@ export function Chat({ currentChannelId }) {
 }
 
 export function MessageInput({ currentChannelId }) {
+  const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  });
+
   const [newMessage, setNewMessage] = useState('');
   const dispatch = useDispatch();
   const auth = useContext(AuthContext);
   const net = useContext(NetStatusContext);
-  const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,7 +53,6 @@ export function MessageInput({ currentChannelId }) {
       dispatch(actions.addOne(messageWithId));
     });
     setNewMessage('');
-    inputRef.current.focus();
   };
 
   return (
@@ -59,9 +64,9 @@ export function MessageInput({ currentChannelId }) {
           onChange={(e) => setNewMessage(e.target.value)}
           disabled={!net.status}
           ref={inputRef}
+          className="border-end-0 border-secondary-subtle"
         />
         <ButtonSend />
-
       </InputGroup>
       {!net.status
         && (

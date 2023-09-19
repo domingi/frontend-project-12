@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@hexlet/chat-server": "^1.1.8",
+    "@popperjs/core": "^2.11.8",
     "socket.io": "^4.7.2"
   }
 }

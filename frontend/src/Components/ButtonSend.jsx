@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useContext } from 'react';
-import { Button } from 'react-bootstrap';
 import { NetStatusContext } from '../contexts';
 
 export default function ButtonSend() {
@@ -8,9 +7,9 @@ export default function ButtonSend() {
   switch (net.status) {
     case true:
       return (
-        <Button type="submit" variant="outline-secondary" id="button-addon2">
+        <button className="btn btn-outline-secondary border-start-0 border-secondary-subtle" type="submit">
           <i className="bi bi-arrow-right-square" />
-        </Button>
+        </button>
       );
     case false:
       return (

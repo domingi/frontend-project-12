@@ -10,6 +10,7 @@ const channelsSlice = createSlice({
     setAll: channelsAdapter.setAll,
     addOne: channelsAdapter.addOne,
     removeOne: channelsAdapter.removeOne,
+    updateOne: channelsAdapter.updateOne,
   },
 });
 
