@@ -5,7 +5,9 @@ import React, { useState } from 'react';
 import './App.css';
 import MainPage from './Components/Main';
 import LoginPage from './Components/Login';
+import SignupPage from './Components/Signup';
 import Error404 from './Components/Error404';
+import Navbar from './Components/Navbar';
 import { AuthContext, NetStatusContext } from './contexts';
 import socket from './socket';
 
@@ -16,6 +18,9 @@ function AuthProvider({ children }) {
   const logIn = () => {
     setLoggedIn(true);
   };
+  const logOut = () => {
+    setLoggedIn(false);
+  };
 
   const [username, setUser] = useState('');
   const [netStatus, setStatus] = useState(true);
@@ -23,7 +28,7 @@ function AuthProvider({ children }) {
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      isLogged, logIn, username, setUser,
+      isLogged, logIn, logOut, username, setUser,
     }}
     >
       {children}
@@ -50,9 +55,11 @@ function App() {
     <NetStatusProvider>
       <AuthProvider>
         <BrowserRouter>
+          <Navbar />
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
             <Route path="*" element={<Error404 />} />
           </Routes>
         </BrowserRouter>

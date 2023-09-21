@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -24,28 +24,12 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Чат центр</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   </head>
-  <body>
-      <div class="container-fluid" style="height: 800px;">
-        <div class="mb-3" style="height: 60px";>
-          <nav class="navbar fixed-top bg-body-tertiary">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">
-                <img src="https://static.thenounproject.com/png/739210-200.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-                Чат-центр
-              </a>
-            </div>
-          </nav>
-        </div>
-        <div class="row mb-3 h-100 align-content-center justify-content-center">
-          <div class="col h-100">
-            <div id="root" class="h-100"></div>
-          </div>
-        </div>
-      </div>
+  <body class="h-100" bg-light>
+    <div class="d-flex flex-column h-100" id="root"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

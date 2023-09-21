@@ -121,6 +121,7 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
       <Modal show={showModalRename} onHide={handleCloseModalRename}>
         <Formik
           validationSchema={сhannelSchema}
+          validateOnChange={false}
           onSubmit={(values) => {
             handleCloseModalRename();
             const { id } = choosenChannel;
@@ -237,6 +238,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
                     value={values.channel}
                     onChange={handleChange}
                     isInvalid={!!errors.channel}
+                    autoFocus
                   />
                   <Form.Control.Feedback type="invalid">{errors.channel}</Form.Control.Feedback>
                 </Form.Group>

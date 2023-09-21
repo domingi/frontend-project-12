@@ -40,15 +40,15 @@ function MainPage() {
   }, [navigate, dispatch]);
 
   return (
-    <Container className="m-5">
-      <Row className="justify-content-md-center">
-        <Col xs={2} className="bg-light-subtle shadow">
+    <Container className="m-5 h-100">
+      <Row className="justify-content-center align-items-center h-100">
+        <Col xs={4} md={2} className="bg-light-subtle shadow h-100">
           <ChannelBox
             currentChannelId={currentChannelId}
             setCurrentChannelId={setCurrentChannelId}
           />
         </Col>
-        <Col>
+        <Col className="h-100">
           <Row className="mb-3">
             <Col>
               <b>

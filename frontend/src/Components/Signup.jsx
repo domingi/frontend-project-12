@@ -7,16 +7,17 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
-import Card from './CardLogin';
+import Card from './CardSignup';
 
-function RegistrationForm() {
+function SignupForm() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const [isValidated, setValidated] = useState(true);
 
   const SignupSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Слишком короткий ник').required('Введите имя'),
-    password: Yup.string().min(3, 'Слишком короткий пароль').required('Введите пароль'),
+    username: Yup.string().min(3, 'Введите имя от 3 до 20 символов').max(20, 'Введите имя от 3 до 20 символов').required('Введите имя'),
+    password: Yup.string().min(6, 'Слишком короткий пароль').required('Введите пароль'),
+    confirmPassword: Yup.string().required('Подтвердите пароль').oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
   });
 
   return (
@@ -24,7 +25,7 @@ function RegistrationForm() {
       validationSchema={SignupSchema}
       validateOnChange={false}
       onSubmit={(values) => {
-        axios.post('/api/v1/login', values)
+        axios.post('/api/v1/signup', values)
           .then((response) => {
             localStorage.setItem('token', response.data.token);
             auth.logIn();
@@ -40,6 +41,7 @@ function RegistrationForm() {
       initialValues={{
         username: '',
         password: '',
+        confirmPassword: '',
       }}
     >
       {({
@@ -50,7 +52,7 @@ function RegistrationForm() {
             <Form.Control
               type="text"
               name="username"
-              placeholder="Ваш ник"
+              placeholder="Имя пользователя"
               value={values.username}
               onChange={handleChange}
               isInvalid={!!errors.username || !isValidated}
@@ -64,17 +66,28 @@ function RegistrationForm() {
               placeholder="Пароль"
               value={values.password}
               onChange={handleChange}
-              isInvalid={!!errors.password || !isValidated}
+              isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="password"
+              name="confirmPassword"
+              placeholder="Подтвердите пароль"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              isInvalid={!!errors.confirmPassword}
+            />
+            <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.confirmPassword}</Form.Control.Feedback>
+          </Form.Group>
           <Button variant="primary" type="submit" className="w-100">
-            Войти
+            Зарегистрироваться
           </Button>
           {!isValidated
         && (
         <p className="text-danger">
-          Неверные имя пользователя или пароль
+          Такое имя уже занято, придумайте другое
         </p>
         )}
         </Form>
@@ -86,7 +99,7 @@ function RegistrationForm() {
 function BuildPage() {
   return (
     <Card>
-      <RegistrationForm />
+      <SignupForm />
     </Card>
   );
 }
