@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../contexts';
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleClick = () => {
     localStorage.clear();
@@ -16,11 +18,11 @@ export default function Navbar() {
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <img src="https://static.thenounproject.com/png/739210-200.png" alt="Logo" width="30" height="24" className="d-inline-block align-text-top" />
-          Hexlet Chat
+          {t('navbar.logo')}
         </a>
         {auth.isLogged
         && (
-          <button type="button" className="btn btn-primary" onClick={handleClick}>Выйти</button>
+          <button type="button" className="btn btn-primary" onClick={handleClick}>{t('navbar.button')}</button>
         )}
       </div>
     </nav>

@@ -8,11 +8,14 @@ import {
 import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { NetStatusContext } from '../contexts';
 import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
 
 function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   useEffect(() => {
     socket.on('renameChannel', (channel) => {
@@ -78,11 +81,11 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
               </button>
               <div className="btn-group" role="group">
                 <button type="button" className={classesForDropdown} data-bs-toggle="dropdown" aria-expanded="false">
-                  <span className="visually-hidden">Управление каналом</span>
+                  <span className="visually-hidden">{t('channels.hidebar')}</span>
                 </button>
                 <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" onClick={(e) => handleShowModalRemove(e, id)} href="#">Удалить</a></li>
-                  <li><a className="dropdown-item" onClick={(e) => handleShowModalRename(e, id, name)} href="#">Переименовать</a></li>
+                  <li><a className="dropdown-item" onClick={(e) => handleShowModalRemove(e, id)} href="#">{t('channels.remove')}</a></li>
+                  <li><a className="dropdown-item" onClick={(e) => handleShowModalRename(e, id, name)} href="#">{t('channels.rename')}</a></li>
                 </ul>
               </div>
             </div>
@@ -104,17 +107,17 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
       {list}
       <Modal show={showModalRemove} onHide={handleCloseModalRemove}>
         <Modal.Header closeButton>
-          <Modal.Title>Удалить канал</Modal.Title>
+          <Modal.Title>{t('channels.modalRemoveTitle')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Уверены?
+          {t('channels.modalRemoveBody')}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModalRemove}>
-            Отменить
+            {t('channels.modalCancel')}
           </Button>
           <Button variant="danger" onClick={handleClickRemove}>
-            Удалить
+            {t('channels.modalConfirm')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -144,7 +147,7 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
           }) => (
             <Form onSubmit={handleSubmit} noValidate>
               <Modal.Header closeButton>
-                <Modal.Title>Переименовать канал</Modal.Title>
+                <Modal.Title>{t('channels.modalRename')}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Form.Group className="mb-3">
@@ -161,10 +164,10 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseModalRename}>
-                  Отменить
+                  {t('channels.modalCancel')}
                 </Button>
                 <Button variant="primary" type="submit">
-                  Отправить
+                  {t('channels.modalConfirm')}
                 </Button>
               </Modal.Footer>
             </Form>
@@ -177,6 +180,7 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
 }
 
 function ChannelBox({ currentChannelId, setCurrentChannelId }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const net = useContext(NetStatusContext);
@@ -195,7 +199,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center p-2">
-        <b>Каналы</b>
+        <b>{t('channels.title')}</b>
         <Button variant="link" onClick={handleShowModal}>
           <i className="bi bi-plus-square" />
         </Button>
@@ -228,7 +232,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
           }) => (
             <Form onSubmit={handleSubmit} noValidate>
               <Modal.Header closeButton>
-                <Modal.Title>Добавить канал</Modal.Title>
+                <Modal.Title>{t('channels.modalAddTitle')}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Form.Group className="mb-3">
@@ -245,10 +249,10 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseModal}>
-                  Отменить
+                  {t('channels.modalCancel')}
                 </Button>
                 <Button variant="primary" type="submit">
-                  Отправить
+                  {t('channels.modalConfirm')}
                 </Button>
               </Modal.Footer>
             </Form>

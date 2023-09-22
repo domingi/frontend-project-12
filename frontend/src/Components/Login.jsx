@@ -4,6 +4,7 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
@@ -12,11 +13,12 @@ import Card from './CardLogin';
 function RegistrationForm() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
 
   const SignupSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Слишком короткий ник').required('Введите имя'),
-    password: Yup.string().min(3, 'Слишком короткий пароль').required('Введите пароль'),
+    username: Yup.string().required(t('errors.requiredName')),
+    password: Yup.string().min(3, t('errors.shortPassword')).required(t('errors.requiredPassword')),
   });
 
   return (
@@ -34,6 +36,7 @@ function RegistrationForm() {
             navigate('/');
           })
           .catch(() => {
+            console.log('Ошибка соединения');
             setValidated(false);
           });
       }}
@@ -50,7 +53,7 @@ function RegistrationForm() {
             <Form.Control
               type="text"
               name="username"
-              placeholder="Ваш ник"
+              placeholder={t('login.username')}
               value={values.username}
               onChange={handleChange}
               isInvalid={!!errors.username || !isValidated}
@@ -61,7 +64,7 @@ function RegistrationForm() {
             <Form.Control
               type="password"
               name="password"
-              placeholder="Пароль"
+              placeholder={t('login.password')}
               value={values.password}
               onChange={handleChange}
               isInvalid={!!errors.password || !isValidated}
@@ -69,12 +72,12 @@ function RegistrationForm() {
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
           <Button variant="primary" type="submit" className="w-100">
-            Войти
+            {t('login.title')}
           </Button>
           {!isValidated
         && (
         <p className="text-danger">
-          Неверные имя пользователя или пароль
+          {t('errors.auth')}
         </p>
         )}
         </Form>

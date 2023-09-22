@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
+import { useTranslation } from 'react-i18next';
+
 function CardSignup({ children }) {
+  const { t } = useTranslation();
   return (
     <div className="container h-100">
       <div className="row justify-content-center align-items-center h-100">
@@ -11,7 +14,7 @@ function CardSignup({ children }) {
               </div>
               <div className="col-md-6 p-3">
                 <div className="card-body">
-                  <h1 className="card-title justify-content-center mb-3">Регистрация</h1>
+                  <h1 className="card-title justify-content-center mb-3">{t('signup.title')}</h1>
                   {children}
                 </div>
               </div>

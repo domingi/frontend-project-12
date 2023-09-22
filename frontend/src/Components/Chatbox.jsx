@@ -3,6 +3,7 @@ import React, {
   useState, useContext, useRef, useEffect,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Form, InputGroup } from 'react-bootstrap';
 import { actions, selectors } from '../slices/messagesSlice';
 import { AuthContext, NetStatusContext } from '../contexts';
@@ -28,6 +29,8 @@ export function Chat({ currentChannelId }) {
 }
 
 export function MessageInput({ currentChannelId }) {
+  const { t } = useTranslation();
+
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current.focus();
@@ -59,7 +62,7 @@ export function MessageInput({ currentChannelId }) {
     <Form onSubmit={handleSubmit}>
       <InputGroup className="mb-3">
         <Form.Control
-          placeholder="Введите сообщение"
+          placeholder={t('chatbox.input')}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           disabled={!net.status}
@@ -70,8 +73,8 @@ export function MessageInput({ currentChannelId }) {
       </InputGroup>
       {!net.status
         && (
-        <p className="text-danger">
-          Ошибка соединения. Обновите страницу и попробуйте ещё раз.
+        <p className="text-danger small">
+          {t('errors.net')}
         </p>
         )}
     </Form>

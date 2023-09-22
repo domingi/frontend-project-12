@@ -1,0 +1,37 @@
+{
+  "username": "WOW",
+  "signup": {
+    "title": "WOW",
+    "username": "WOW",
+    "password": "WOW",
+    "passwordConfirm": "WOW",
+    "button": "WOW",
+    "noAcc": "WOW" 
+  },
+  "login": {
+    "title": "WOW",
+    "username": "WOW",
+    "password": "WOW",
+    "button": "Войти"
+  },
+  "navbar": {
+    "logo": "WOW",
+    "button": "WOW"
+  },
+  "channels": {
+    "hidebar": "WOW",
+    "title": "WOW",
+    "remove": "WOW",
+    "rename": "WOW",
+    "modalRemoveTitle": "WOW",
+    "modalRemoveBody": "WOW",
+    "modalRemoveConfirm": "WOW",
+    "modalRename": "WOW",
+    "modalAddTitle": "WOW",
+    "modalCancel": "WOW",
+    "modalConfirm": "WOW"
+  },
+  "chatbox": {
+    "input": "WOW WOW"
+  }
+}

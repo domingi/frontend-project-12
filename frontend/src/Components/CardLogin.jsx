@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
+import { useTranslation } from 'react-i18next';
+
 function CardLogin({ children }) {
+  const { t } = useTranslation();
   return (
     <div className="container h-100">
       <div className="row justify-content-center align-items-center h-100">
@@ -11,15 +14,14 @@ function CardLogin({ children }) {
               </div>
               <div className="col-md-6 p-3">
                 <div className="card-body">
-                  <h1 className="card-title justify-content-center mb-3">Войти</h1>
+                  <h1 className="card-title justify-content-center mb-3">{t('login.title')}</h1>
                   {children}
                 </div>
               </div>
             </div>
             <div className="card-footer text-body-secondary p-3">
-              Нет аккаунта?
-              {' '}
-              <a href="/signup">Регистрация</a>
+              {t('signup.noAcc')}
+              <a href="/signup">{t('signup.title')}</a>
             </div>
           </div>
         </div>

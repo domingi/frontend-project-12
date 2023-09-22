@@ -40,34 +40,30 @@ function MainPage() {
   }, [navigate, dispatch]);
 
   return (
-    <Container className="m-5 h-100">
-      <Row className="justify-content-center align-items-center h-100">
-        <Col xs={4} md={2} className="bg-light-subtle shadow h-100">
+    <Container className="m-5 h-100 overflow-hidden shadow-sm">
+      <Row className="justify-content-center align-items-center h-100 shadow">
+        <Col xs={4} md={2} className="bg-light shadow h-100">
           <ChannelBox
             currentChannelId={currentChannelId}
             setCurrentChannelId={setCurrentChannelId}
           />
         </Col>
-        <Col className="h-100">
-          <Row className="mb-3">
-            <Col>
+        <Col className="h-100 p-0">
+          <div className="d-flex flex-column h-100">
+            <div className="bg-light shadow-sm p-3">
               <b>
                 #
                 {' '}
                 {currentChannel}
               </b>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
+            </div>
+            <div className="overflow-auto p-3">
               <Chat currentChannelId={currentChannelId} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
+            </div>
+            <div className="mt-auto p-3">
               <MessageInput currentChannelId={currentChannelId} />
-            </Col>
-          </Row>
+            </div>
+          </div>
         </Col>
       </Row>
     </Container>

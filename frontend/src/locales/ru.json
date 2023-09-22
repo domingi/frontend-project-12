@@ -1,0 +1,50 @@
+{
+  "signup": {
+    "title": "Регистрация",
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "passwordConfirm": "Подтвердите пароль",
+    "button": "Зарегистрироваться",
+    "noAcc": "Нет аккаунта? " 
+  },
+  "login": {
+    "title": "Войти",
+    "username": "Ваш ник",
+    "password": "Пароль",
+    "button": "Войти"
+  },
+  "navbar": {
+    "logo": "Hexlet Chat",
+    "button": "Выйти"
+  },
+  "channels": {
+    "hidebar": "Управление каналом",
+    "title": "Каналы",
+    "remove": "Удалить",
+    "rename": "Переименовать",
+    "modalRemoveTitle": "Удалить канал",
+    "modalRemoveBody": "Уверены?",
+    "modalRemoveConfirm": "Удалить",
+    "modalRename": "Переименовать канал",
+    "modalAddTitle": "Добавить канал",
+    "modalCancel": "Отменить",
+    "modalConfirm": "Отправить"
+  },
+  "chatbox": {
+    "input": "Введите сообщение"
+  },
+  "errors": {
+    "auth": "Неверные имя пользователя или пароль",
+    "shortPassword": "Слишком короткий пароль",
+    "requiredName": "Введите имя",
+    "requiredPassword": "Введите пароль",
+    "nameLength": "Введите имя от 3 до 20 символов",
+    "requiredConfirmPassword": "Подтвердите пароль",
+    "confirmedPassword": "Пароли должны совпадать",
+    "wrongName": "Такое имя уже занято, придумайте другое",
+    "net": "Ошибка соединения. Обновите страницу и попробуйте ещё раз."
+  },
+  "other": {
+    "404": "Страница не найдена"
+  }
+}
