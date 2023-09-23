@@ -9,20 +9,14 @@ import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
 import { NetStatusContext } from '../contexts';
 import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
+import { notifySucces } from './notifications';
 
 function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
   const { t } = useTranslation();
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    socket.on('renameChannel', (channel) => {
-      console.log(channel);
-      dispatch(actions.updateOne({ id: channel.id, changes: { ...channel } }));
-    });
-  }, [dispatch]);
   const channels = useSelector(selectors.selectAll);
   const net = useContext(NetStatusContext);
 
@@ -42,7 +36,6 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
 
   const handleClickRemove = () => {
     const { id } = choosenChannel;
-    dispatch(actions.removeOne(id));
     socket.emit('removeChannel', { id }, (response) => {
       console.log(response.status);
       if (response.status !== 'ok') {
@@ -51,10 +44,6 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
         net.setStatus(true);
       }
     });
-
-    if (id === currentChannelId) {
-      setCurrentChannelId(1);
-    }
     handleCloseModalRemove();
   };
 
@@ -117,7 +106,7 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
             {t('channels.modalCancel')}
           </Button>
           <Button variant="danger" onClick={handleClickRemove}>
-            {t('channels.modalConfirm')}
+            {t('channels.remove')}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -183,6 +172,27 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    socket.on('renameChannel', (channel) => {
+      dispatch(actions.updateOne({ id: channel.id, changes: { ...channel } }));
+      notifySucces(t('notify.rename'), channel.id);
+      console.log('Сработал renameChannel');
+    });
+    socket.on('removeChannel', ({ id }) => {
+      dispatch(actions.removeOne(id));
+      if (id === currentChannelId) {
+        setCurrentChannelId(1);
+      }
+      notifySucces(t('notify.remove'), id);
+    });
+    socket.on('newChannel', (channel) => {
+      dispatch(actions.addOne(channel));
+      setCurrentChannelId(channel.id);
+      notifySucces(t('notify.add'), channel.id);
+    });
+    console.log('Сработал useEffect');
+  }, [dispatch, t, currentChannelId, setCurrentChannelId]);
+
   const net = useContext(NetStatusContext);
 
   const channels = useSelector(selectors.selectAll);
@@ -207,6 +217,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
       <Modal show={showModal} onHide={handleCloseModal}>
         <Formik
           validationSchema={сhannelSchema}
+          validateOnChange={false}
           onSubmit={(values) => {
             handleCloseModal();
             const channel = { name: values.channel, removable: true };
@@ -217,10 +228,6 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
               } else {
                 net.setStatus(true);
               }
-            });
-            socket.on('newChannel', (channelWithId) => {
-              dispatch(actions.addOne(channelWithId));
-              setCurrentChannelId(channelWithId.id);
             });
           }}
           initialValues={{
@@ -264,6 +271,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
           {GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema)}
         </Col>
       </Row>
+      <ToastContainer />
     </>
   );
 }
