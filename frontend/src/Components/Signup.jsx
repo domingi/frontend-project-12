@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
 import Card from './CardSignup';
+import { notifyError } from './notifications';
 
 function SignupForm() {
   const auth = useContext(AuthContext);
@@ -18,7 +19,7 @@ function SignupForm() {
   const [isValidated, setValidated] = useState(true);
 
   const SignupSchema = Yup.object().shape({
-    username: Yup.string().min(6, t('errors.nameLength')).max(20, t('errors.nameLength')).required(t('errors.requiredName')),
+    username: Yup.string().min(4, t('errors.nameLength')).max(20, t('errors.nameLength')).required(t('errors.requiredName')),
     password: Yup.string().min(6, t('errors.shortPassword')).required(t('errors.requiredPassword')),
     confirmPassword: Yup.string().required(t('errors.requiredConfirmPassword')).oneOf([Yup.ref('password'), null], t('errors.confirmedPassword')),
   });
@@ -37,9 +38,14 @@ function SignupForm() {
             auth.setUser(username);
             navigate('/');
           })
-          .catch(() => {
-            console.log('Ошибка соединения');
-            setValidated(false);
+          .catch((e) => {
+            console.log(e);
+            if (e.code === 'ERR_BAD_REQUEST') {
+              setValidated(false);
+            }
+            if (e.code === 'ERR_NETWORK') {
+              notifyError(t('notify.serverError'));
+            }
           });
       }}
       initialValues={{

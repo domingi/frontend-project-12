@@ -2,13 +2,14 @@
 import React, {
   useState, useContext, useRef, useEffect,
 } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, InputGroup } from 'react-bootstrap';
-import { actions, selectors } from '../slices/messagesSlice';
+import { selectors } from '../slices/messagesSlice';
 import { AuthContext, NetStatusContext } from '../contexts';
 import socket from '../socket';
 import ButtonSend from './ButtonSend';
+import { notifyError } from './notifications';
 
 export function Chat({ currentChannelId }) {
   const messages = useSelector(selectors.selectAll);
@@ -37,7 +38,6 @@ export function MessageInput({ currentChannelId }) {
   });
 
   const [newMessage, setNewMessage] = useState('');
-  const dispatch = useDispatch();
   const auth = useContext(AuthContext);
   const net = useContext(NetStatusContext);
 
@@ -45,17 +45,14 @@ export function MessageInput({ currentChannelId }) {
     e.preventDefault();
     const message = { body: newMessage, user: auth.username, channelId: currentChannelId };
     socket.emit('newMessage', message, (response) => {
-      console.log(response.status);
       if (response.status !== 'ok') {
         net.setStatus(false);
+        notifyError(t('notify.sendError'));
       } else {
         net.setStatus(true);
+        setNewMessage('');
       }
     });
-    socket.on('newMessage', (messageWithId) => {
-      dispatch(actions.addOne(messageWithId));
-    });
-    setNewMessage('');
   };
 
   return (

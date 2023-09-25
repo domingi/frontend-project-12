@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
 import Card from './CardLogin';
+import { notifyError } from './notifications';
 
 function RegistrationForm() {
   const auth = useContext(AuthContext);
@@ -35,9 +36,14 @@ function RegistrationForm() {
             auth.setUser(username);
             navigate('/');
           })
-          .catch(() => {
-            console.log('Ошибка соединения');
-            setValidated(false);
+          .catch((e) => {
+            console.log(e);
+            if (e.code === 'ERR_BAD_REQUEST') {
+              setValidated(false);
+            }
+            if (e.code === 'ERR_NETWORK') {
+              notifyError(t('notify.serverError'));
+            }
           });
       }}
       initialValues={{

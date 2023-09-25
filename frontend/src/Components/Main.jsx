@@ -12,9 +12,10 @@ import { actions as messagesActions } from '../slices/messagesSlice';
 import { Chat, MessageInput } from './Chatbox';
 import ChannelBox from './Channels';
 
-function MainPage({ currentChannelId, setCurrentChannelId }) {
+function MainPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const currentChannelId = useSelector((state) => state.channels.currentId);
 
   const currentChannel = useSelector((state) => {
     const channel = selectors.selectById(state, currentChannelId);
@@ -33,19 +34,16 @@ function MainPage({ currentChannelId, setCurrentChannelId }) {
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
-        setCurrentChannelId(response.data.currentChannelId);
+        dispatch(channelsActions.setCurrentId(response.data.currentChannelId));
       });
     }
-  }, [navigate, dispatch, setCurrentChannelId]);
+  }, [navigate, dispatch]);
 
   return (
     <Container className="m-5 h-100 overflow-hidden shadow-sm">
       <Row className="justify-content-center align-items-center h-100 shadow">
         <Col xs={4} md={2} className="bg-light shadow h-100">
-          <ChannelBox
-            currentChannelId={currentChannelId}
-            setCurrentChannelId={setCurrentChannelId}
-          />
+          <ChannelBox currentChannelId={currentChannelId} />
         </Col>
         <Col className="h-100 p-0">
           <div className="d-flex flex-column h-100">

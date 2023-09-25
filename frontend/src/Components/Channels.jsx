@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Row, Col, Form, Button, Modal,
 } from 'react-bootstrap';
@@ -9,18 +9,19 @@ import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer } from 'react-toastify';
 import { NetStatusContext } from '../contexts';
-import { selectors } from '../slices/channelSlice';
+import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
+import { notifyError } from './notifications';
 
-function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
+function GetChannels(currentChannelId, сhannelSchema) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const channels = useSelector(selectors.selectAll);
   const net = useContext(NetStatusContext);
 
   const handleClick = (id) => {
-    setCurrentChannelId(id);
+    dispatch(actions.setCurrentId(id));
   };
 
   const [choosenChannel, setChoosen] = useState({});
@@ -39,6 +40,7 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
       console.log(response.status);
       if (response.status !== 'ok') {
         net.setStatus(false);
+        notifyError(t('notify.socketError'));
       } else {
         net.setStatus(true);
       }
@@ -118,9 +120,9 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
             const { id } = choosenChannel;
             const channel = { name: values.channel, id };
             socket.emit('renameChannel', channel, (response) => {
-              console.log(response.status);
               if (response.status !== 'ok') {
                 net.setStatus(false);
+                notifyError(t('notify.socketError'));
               } else {
                 net.setStatus(true);
               }
@@ -199,9 +201,9 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
             handleCloseModal();
             const channel = { name: values.channel, removable: true };
             socket.emit('newChannel', channel, (response) => {
-              console.log(response.status);
               if (response.status !== 'ok') {
                 net.setStatus(false);
+                notifyError(t('notify.socketError'));
               } else {
                 net.setStatus(true);
               }
@@ -248,7 +250,6 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
           {GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema)}
         </Col>
       </Row>
-      <ToastContainer />
     </>
   );
 }

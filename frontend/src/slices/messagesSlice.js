@@ -10,11 +10,6 @@ const messagesSlice = createSlice({
   reducers: {
     setAll: messagesAdapter.setAll,
     addOne: messagesAdapter.addOne,
-    removeMessagesFromDeletedChannel(state, action) {
-      const messages = state.messages.filter(({ channelId }) => (action.payload === channelId));
-      const ids = messages.map((message) => message.id);
-      messagesAdapter.removeMany(state, ids);
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(channelActions.removeOne, (state, action) => {
