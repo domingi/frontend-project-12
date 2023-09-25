@@ -4,12 +4,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { useState } from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
+import { Provider, ErrorBoundary } from '@rollbar/react';
 import MainPage from './Components/Main';
 import LoginPage from './Components/Login';
 import SignupPage from './Components/Signup';
 import Error404 from './Components/Error404';
 import Navbar from './Components/Navbar';
 import { AuthContext, NetStatusContext } from './contexts';
+
+const rollbarConfig = {
+  accessToken: '61d76b56e38f45a389dfd33091e7de9c',
+  environment: 'production',
+};
 
 function AuthProvider({ children }) {
   const [isLogged, setLoggedIn] = useState(false);
@@ -49,20 +55,24 @@ function NetStatusProvider({ children }) {
 
 function App() {
   return (
-    <NetStatusProvider>
-      <AuthProvider>
-        <BrowserRouter>
-          <Navbar />
-          <ToastContainer />
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="login" element={<LoginPage />} />
-            <Route path="signup" element={<SignupPage />} />
-            <Route path="*" element={<Error404 />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </NetStatusProvider>
+    <Provider config={rollbarConfig}>
+      <ErrorBoundary>
+        <NetStatusProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <Navbar />
+              <ToastContainer />
+              <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="login" element={<LoginPage />} />
+                <Route path="signup" element={<SignupPage />} />
+                <Route path="*" element={<Error404 />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
+        </NetStatusProvider>
+      </ErrorBoundary>
+    </Provider>
   );
 }
 
