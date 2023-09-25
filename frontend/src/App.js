@@ -17,13 +17,6 @@ import { notifySucces } from './Components/notifications';
 
 socket.on('connect', () => {
   console.log('Heelo! Its Client');
-  const dispatch = useDispatch();
-  const { t } = useTranslation();
-
-  socket.on('renameChannel', (channel) => {
-    dispatch(actions.updateOne({ id: channel.id, changes: { ...channel } }));
-    notifySucces(t('notify.rename'));
-  });
 });
 
 function AuthProvider({ children }) {
@@ -69,7 +62,10 @@ function App() {
 
   useEffect(() => {
     console.log('инициализация');
-
+    socket.on('renameChannel', (channel) => {
+      dispatch(actions.updateOne({ id: channel.id, changes: { ...channel } }));
+      notifySucces(t('notify.rename'));
+    });
     socket.on('removeChannel', ({ id }) => {
       dispatch(actions.removeOne(id));
       if (id === currentChannelId) {
