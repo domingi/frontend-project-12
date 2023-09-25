@@ -59,6 +59,7 @@ function SignupForm() {
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
+            <Form.Label htmlFor="username" visuallyHidden>{t('signup.username')}</Form.Label>
             <Form.Control
               type="text"
               name="username"
@@ -72,6 +73,7 @@ function SignupForm() {
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label htmlFor="password" visuallyHidden>{t('signup.password')}</Form.Label>
             <Form.Control
               type="password"
               name="password"
@@ -83,6 +85,7 @@ function SignupForm() {
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label htmlFor="confirmPassword" visuallyHidden>{t('signup.passwordConfirm')}</Form.Label>
             <Form.Control
               type="password"
               name="confirmPassword"
