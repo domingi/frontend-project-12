@@ -27,7 +27,7 @@ function SignupForm() {
   return (
     <Formik
       validationSchema={SignupSchema}
-//      validateOnChange={false}
+      validateOnChange={false}
       onSubmit={(values) => {
         axios.post('/api/v1/signup', values)
           .then((response) => {
@@ -39,7 +39,6 @@ function SignupForm() {
             navigate('/');
           })
           .catch((e) => {
-            console.log(e);
             if (e.code === 'ERR_BAD_REQUEST') {
               setValidated(false);
             }
@@ -68,7 +67,7 @@ function SignupForm() {
               onChange={handleChange}
               isInvalid={!!errors.username || !isValidated}
             />
-            <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">
+            <Form.Control.Feedback type="invalid">
               {errors.username}
             </Form.Control.Feedback>
           </Form.Group>
