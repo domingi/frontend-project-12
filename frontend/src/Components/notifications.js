@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export const notifySucces = (text, id) => toast.success(text, {
+export const notifySucces = (text) => toast.success(text, {
   position: 'top-right',
   autoClose: 5000,
   hideProgressBar: false,
@@ -10,7 +10,6 @@ export const notifySucces = (text, id) => toast.success(text, {
   draggable: true,
   progress: undefined,
   theme: 'light',
-  toastId: id,
 });
 
 export const notifyError = (text) => toast.error(text, {

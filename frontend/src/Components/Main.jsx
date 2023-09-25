@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +12,7 @@ import { actions as messagesActions } from '../slices/messagesSlice';
 import { Chat, MessageInput } from './Chatbox';
 import ChannelBox from './Channels';
 
-function MainPage() {
-  const [currentChannelId, setCurrentChannelId] = useState(1);
+function MainPage({ currentChannelId, setCurrentChannelId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -37,7 +36,7 @@ function MainPage() {
         setCurrentChannelId(response.data.currentChannelId);
       });
     }
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, setCurrentChannelId]);
 
   return (
     <Container className="m-5 h-100 overflow-hidden shadow-sm">

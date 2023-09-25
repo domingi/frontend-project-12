@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useContext, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useContext } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Row, Col, Form, Button, Modal,
 } from 'react-bootstrap';
@@ -11,9 +11,8 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import { NetStatusContext } from '../contexts';
-import { actions, selectors } from '../slices/channelSlice';
+import { selectors } from '../slices/channelSlice';
 import socket from '../socket';
-import { notifySucces } from './notifications';
 
 function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
   const { t } = useTranslation();
@@ -170,28 +169,6 @@ function GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema) {
 
 function ChannelBox({ currentChannelId, setCurrentChannelId }) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    socket.on('renameChannel', (channel) => {
-      dispatch(actions.updateOne({ id: channel.id, changes: { ...channel } }));
-      notifySucces(t('notify.rename'), channel.id);
-      console.log('Сработал renameChannel');
-    });
-    socket.on('removeChannel', ({ id }) => {
-      dispatch(actions.removeOne(id));
-      if (id === currentChannelId) {
-        setCurrentChannelId(1);
-      }
-      notifySucces(t('notify.remove'), id);
-    });
-    socket.on('newChannel', (channel) => {
-      dispatch(actions.addOne(channel));
-      setCurrentChannelId(channel.id);
-      notifySucces(t('notify.add'), channel.id);
-    });
-    console.log('Сработал useEffect');
-  }, [dispatch, t, currentChannelId, setCurrentChannelId]);
 
   const net = useContext(NetStatusContext);
 
