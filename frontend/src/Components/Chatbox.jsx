@@ -5,6 +5,7 @@ import React, {
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, InputGroup } from 'react-bootstrap';
+import filter from 'leo-profanity';
 import { selectors } from '../slices/messagesSlice';
 import { AuthContext, NetStatusContext } from '../contexts';
 import socket from '../socket';
@@ -43,7 +44,8 @@ export function MessageInput({ currentChannelId }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const message = { body: newMessage, user: auth.username, channelId: currentChannelId };
+    const filteredMessage = filter.clean(newMessage);
+    const message = { body: filteredMessage, user: auth.username, channelId: currentChannelId };
     socket.emit('newMessage', message, (response) => {
       if (response.status !== 'ok') {
         net.setStatus(false);

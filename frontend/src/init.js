@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import filter from 'leo-profanity';
 import socket from './socket';
 import ru from './locales/ru.json';
 import en from './locales/en.json';
@@ -30,6 +31,8 @@ export default () => {
         escapeValue: false,
       },
     });
+
+  filter.loadDictionary('ru');
 
   console.log('инициализация');
 
