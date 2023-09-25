@@ -27,7 +27,7 @@ function SignupForm() {
   return (
     <Formik
       validationSchema={SignupSchema}
-      validateOnChange={false}
+//      validateOnChange={false}
       onSubmit={(values) => {
         axios.post('/api/v1/signup', values)
           .then((response) => {
