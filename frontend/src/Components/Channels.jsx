@@ -141,9 +141,11 @@ function GetChannels(currentChannelId, сhannelSchema) {
               </Modal.Header>
               <Modal.Body>
                 <Form.Group className="mb-3">
+                  <Form.Label htmlFor="channel" visuallyHidden>{t('channels.name')}</Form.Label>
                   <Form.Control
                     type="text"
                     name="channel"
+                    id="channel"
                     value={values.channel}
                     onChange={handleChange}
                     isInvalid={!!errors.channel}
@@ -191,6 +193,7 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
         <b>{t('channels.title')}</b>
         <Button variant="link" onClick={handleShowModal}>
           <i className="bi bi-plus-square" />
+          <span className="visually-hidden">+</span>
         </Button>
       </div>
       <Modal show={showModal} onHide={handleCloseModal}>
@@ -222,9 +225,11 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
               </Modal.Header>
               <Modal.Body>
                 <Form.Group className="mb-3">
+                  <Form.Label htmlFor="channel" visuallyHidden>{t('channels.name')}</Form.Label>
                   <Form.Control
                     type="text"
                     name="channel"
+                    id="channel"
                     value={values.channel}
                     onChange={handleChange}
                     isInvalid={!!errors.channel}

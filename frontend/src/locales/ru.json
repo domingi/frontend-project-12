@@ -28,7 +28,8 @@
     "modalRename": "Переименовать канал",
     "modalAddTitle": "Добавить канал",
     "modalCancel": "Отменить",
-    "modalConfirm": "Отправить"
+    "modalConfirm": "Отправить",
+    "name": "Имя канала"
   },
   "chatbox": {
     "input": "Введите сообщение",
