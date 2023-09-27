@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-function BuildPage() {
+const BuildPage = () => {
   const { t } = useTranslation();
 
   return (
@@ -9,6 +9,6 @@ function BuildPage() {
       <h2>{t('other.404')}</h2>
     </>
   );
-}
+};
 
 export default BuildPage;

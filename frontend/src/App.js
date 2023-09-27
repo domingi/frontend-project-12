@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -17,7 +16,7 @@ const rollbarConfig = {
   environment: 'production',
 };
 
-function AuthProvider({ children }) {
+const AuthProvider = ({ children }) => {
   const [isLogged, setLoggedIn] = useState(false);
   const logIn = () => {
     setLoggedIn(true);
@@ -37,9 +36,9 @@ function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-function NetStatusProvider({ children }) {
+const NetStatusProvider = ({ children }) => {
   const [status, setStatus] = useState(true);
 
   return (
@@ -51,29 +50,27 @@ function NetStatusProvider({ children }) {
       {children}
     </NetStatusContext.Provider>
   );
-}
+};
 
-function App() {
-  return (
-    <Provider config={rollbarConfig}>
-      <ErrorBoundary>
-        <NetStatusProvider>
-          <AuthProvider>
-            <BrowserRouter>
-              <Navbar />
-              <ToastContainer />
-              <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="login" element={<LoginPage />} />
-                <Route path="signup" element={<SignupPage />} />
-                <Route path="*" element={<Error404 />} />
-              </Routes>
-            </BrowserRouter>
-          </AuthProvider>
-        </NetStatusProvider>
-      </ErrorBoundary>
-    </Provider>
-  );
-}
+const App = () => (
+  <Provider config={rollbarConfig}>
+    <ErrorBoundary>
+      <NetStatusProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Navbar />
+            <ToastContainer />
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="signup" element={<SignupPage />} />
+              <Route path="*" element={<Error404 />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </NetStatusProvider>
+    </ErrorBoundary>
+  </Provider>
+);
 
 export default App;

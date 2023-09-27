@@ -2,7 +2,7 @@
 import React, { useContext } from 'react';
 import { NetStatusContext } from '../contexts';
 
-export default function ButtonSend() {
+const ButtonSend = () => {
   const net = useContext(NetStatusContext);
   switch (net.status) {
     case true:
@@ -21,4 +21,6 @@ export default function ButtonSend() {
     default:
       return null;
   }
-}
+};
+
+export default ButtonSend;

@@ -12,7 +12,7 @@ import { actions as messagesActions } from '../slices/messagesSlice';
 import { Chat, MessageInput } from './Chatbox';
 import ChannelBox from './Channels';
 
-function MainPage() {
+const MainPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const currentChannelId = useSelector((state) => state.channels.currentId);
@@ -65,6 +65,6 @@ function MainPage() {
       </Row>
     </Container>
   );
-}
+};
 
 export default MainPage;

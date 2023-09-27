@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useTranslation } from 'react-i18next';
 
-function CardLogin({ children }) {
+const CardLogin = ({ children }) => {
   const { t } = useTranslation();
   return (
     <div className="container h-100">
@@ -29,6 +29,6 @@ function CardLogin({ children }) {
     </div>
 
   );
-}
+};
 
 export default CardLogin;
