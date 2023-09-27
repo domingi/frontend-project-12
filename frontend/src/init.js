@@ -34,10 +34,8 @@ export default () => {
 
   filter.loadDictionary('en');
 
-  console.log('инициализация');
-
   socket.on('connect', () => {
-    console.log('Heelo! Its Client');
+    console.log('Соединение установлено');
   });
 
   socket.on('renameChannel', (channel) => {

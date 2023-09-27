@@ -1,20 +1,26 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Row, Col, Container,
 } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import { actions as channelsActions, selectors } from '../slices/channelSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import { Chat, MessageInput } from './Chatbox';
+import { AuthContext } from '../contexts';
 import ChannelBox from './Channels';
+import { notifyError } from './notifications';
 
 const MainPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const auth = useContext(AuthContext);
+
   const currentChannelId = useSelector((state) => state.channels.currentId);
 
   const currentChannel = useSelector((state) => {
@@ -35,9 +41,13 @@ const MainPage = () => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
         dispatch(channelsActions.setCurrentId(response.data.currentChannelId));
+        auth.logIn();
+        auth.setUser(localStorage.getItem('username'));
+      }).catch(() => {
+        notifyError(t('notify.serverError'));
       });
     }
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, auth, t]);
 
   return (
     <Container className="m-5 h-100 overflow-hidden shadow-sm">

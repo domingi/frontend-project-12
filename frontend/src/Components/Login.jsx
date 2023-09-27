@@ -5,14 +5,12 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts';
 import Card from './CardLogin';
 import { notifyError } from './notifications';
 
 const RegistrationForm = () => {
-  const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
@@ -32,10 +30,9 @@ const RegistrationForm = () => {
         axios.post('/api/v1/login', values)
           .then((response) => {
             localStorage.setItem('token', response.data.token);
-            auth.logIn();
-            setValidated(true);
             const { username } = values;
-            auth.setUser(username);
+            localStorage.setItem('username', username);
+            setValidated(true);
             setFetched(false);
             navigate('/');
           })
