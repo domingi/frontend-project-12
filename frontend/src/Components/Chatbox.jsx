@@ -68,6 +68,7 @@ export function MessageInput({ currentChannelId }) {
           disabled={!net.status}
           ref={inputRef}
           className="border-0 rounded-2"
+          aria-label={t('chatbox.newMessage')}
         />
         <Form.Label htmlFor="chatInput" visuallyHidden>{t('chatbox.input')}</Form.Label>
         <Button
