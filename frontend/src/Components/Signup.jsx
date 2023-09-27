@@ -19,8 +19,8 @@ function SignupForm() {
   const [isValidated, setValidated] = useState(true);
 
   const SignupSchema = Yup.object().shape({
-    username: Yup.string().min(4, t('errors.nameLength')).max(20, t('errors.nameLength')).required(t('errors.requiredName')),
-    password: Yup.string().min(6, t('errors.shortPassword')).required(t('errors.requiredPassword')),
+    username: Yup.string().required(t('errors.required')).min(3, t('errors.nameLength')).max(20, t('errors.nameLength')),
+    password: Yup.string().required(t('errors.required')).min(6, t('errors.shortPassword')),
     confirmPassword: Yup.string().required(t('errors.requiredConfirmPassword')).oneOf([Yup.ref('password'), null], t('errors.confirmedPassword')),
   });
 
@@ -54,20 +54,25 @@ function SignupForm() {
       }}
     >
       {({
-        handleSubmit, handleChange, values, errors,
+        handleSubmit, handleChange, values, errors, validateField,
       }) => (
-        <Form noValidate onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label htmlFor="username" visuallyHidden>{t('signup.username')}</Form.Label>
             <Form.Control
               type="text"
               name="username"
+              id="username"
               placeholder={t('signup.username')}
               value={values.username}
               onChange={handleChange}
               isInvalid={!!errors.username || !isValidated}
+              autoFocus
+              autoComplete="off"
+              validate={SignupSchema}
+              onBlur={() => validateField('username')}
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">
               {errors.username}
             </Form.Control.Feedback>
           </Form.Group>
@@ -76,10 +81,14 @@ function SignupForm() {
             <Form.Control
               type="password"
               name="password"
+              id="password"
               placeholder={t('signup.password')}
               value={values.password}
               onChange={handleChange}
               isInvalid={!!errors.password}
+              autoComplete="off"
+              validate={SignupSchema}
+              onBlur={() => validateField('password')}
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
@@ -88,10 +97,14 @@ function SignupForm() {
             <Form.Control
               type="password"
               name="confirmPassword"
+              id="confirmPassword"
               placeholder={t('signup.passwordConfirm')}
               value={values.confirmPassword}
               onChange={handleChange}
               isInvalid={!!errors.confirmPassword}
+              autoComplete="off"
+              validate={SignupSchema}
+              onBlur={() => validateField('confirmPassword')}
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.confirmPassword}</Form.Control.Feedback>
           </Form.Group>
