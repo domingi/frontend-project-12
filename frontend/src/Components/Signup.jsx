@@ -17,6 +17,7 @@ function SignupForm() {
   const { t } = useTranslation();
 
   const [isValidated, setValidated] = useState(true);
+  const [isFetched, setFetched] = useState(false);
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().required(t('errors.required')).min(3, t('errors.nameLength')).max(20, t('errors.nameLength')),
@@ -29,6 +30,7 @@ function SignupForm() {
       validationSchema={SignupSchema}
       validateOnChange={false}
       onSubmit={(values) => {
+        setFetched(true);
         axios.post('/api/v1/signup', values)
           .then((response) => {
             localStorage.setItem('token', response.data.token);
@@ -36,9 +38,11 @@ function SignupForm() {
             setValidated(true);
             const { username } = values;
             auth.setUser(username);
+            setFetched(false);
             navigate('/');
           })
           .catch((e) => {
+            setFetched(false);
             if (e.code === 'ERR_BAD_REQUEST') {
               setValidated(false);
             }
@@ -108,7 +112,7 @@ function SignupForm() {
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.confirmPassword}</Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">
+          <Button variant="primary" type="submit" className="w-100" disabled={isFetched}>
             {t('signup.button')}
           </Button>
           {!isValidated

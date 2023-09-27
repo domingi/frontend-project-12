@@ -32,7 +32,7 @@ export default () => {
       },
     });
 
-  filter.loadDictionary('ru');
+  filter.loadDictionary('en');
 
   console.log('инициализация');
 

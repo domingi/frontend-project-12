@@ -16,6 +16,7 @@ function RegistrationForm() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
+  const [isFetched, setFetched] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     username: Yup.string().required(t('errors.required')),
@@ -27,6 +28,7 @@ function RegistrationForm() {
       validationSchema={LoginSchema}
       validateOnChange={false}
       onSubmit={(values) => {
+        setFetched(true);
         axios.post('/api/v1/login', values)
           .then((response) => {
             localStorage.setItem('token', response.data.token);
@@ -34,10 +36,11 @@ function RegistrationForm() {
             setValidated(true);
             const { username } = values;
             auth.setUser(username);
+            setFetched(false);
             navigate('/');
           })
           .catch((e) => {
-            console.log(e);
+            setFetched(false);
             if (e.code === 'ERR_BAD_REQUEST') {
               setValidated(false);
             }
@@ -86,7 +89,7 @@ function RegistrationForm() {
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100">
+          <Button variant="primary" type="submit" className="w-100" disabled={isFetched}>
             {t('login.title')}
           </Button>
           {!isValidated

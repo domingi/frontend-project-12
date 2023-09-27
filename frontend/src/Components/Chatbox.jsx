@@ -4,12 +4,11 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Form, InputGroup } from 'react-bootstrap';
+import { Form, InputGroup, Button } from 'react-bootstrap';
 import filter from 'leo-profanity';
 import { selectors } from '../slices/messagesSlice';
 import { AuthContext, NetStatusContext } from '../contexts';
 import socket from '../socket';
-import ButtonSend from './ButtonSend';
 import { notifyError } from './notifications';
 
 export function Chat({ currentChannelId }) {
@@ -59,16 +58,26 @@ export function MessageInput({ currentChannelId }) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <InputGroup className="mb-3">
+      <InputGroup className="mb-3 border rounded-2">
         <Form.Control
+          id="chatInput"
+          name="chatInput"
           placeholder={t('chatbox.input')}
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           disabled={!net.status}
           ref={inputRef}
-          className="border-end-0 border-secondary-subtle"
+          className="border-0 rounded-2"
         />
-        <ButtonSend />
+        <Form.Label htmlFor="chatInput" visuallyHidden>{t('chatbox.input')}</Form.Label>
+        <Button
+          variant={null}
+          disabled={newMessage === ''}
+          className="border-0"
+        >
+          <i className="bi bi-arrow-right-square" />
+        </Button>
+
       </InputGroup>
       {!net.status
         && (
