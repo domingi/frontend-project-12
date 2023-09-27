@@ -11,7 +11,7 @@ import { AuthContext, NetStatusContext } from '../contexts';
 import socket from '../socket';
 import { notifyError } from './notifications';
 
-export function Chat({ currentChannelId }) {
+export const Chat = ({ currentChannelId }) => {
   const messages = useSelector(selectors.selectAll);
   if (messages.length === 0) return null;
   const messagesForChannel = messages.filter(({ channelId }) => channelId === currentChannelId);
@@ -27,9 +27,9 @@ export function Chat({ currentChannelId }) {
       </p>
     ));
   return list;
-}
+};
 
-export function MessageInput({ currentChannelId }) {
+export const MessageInput = ({ currentChannelId }) => {
   const { t } = useTranslation();
 
   const inputRef = useRef(null);
@@ -88,4 +88,4 @@ export function MessageInput({ currentChannelId }) {
         )}
     </Form>
   );
-}
+};

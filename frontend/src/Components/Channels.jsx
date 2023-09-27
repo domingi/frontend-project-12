@@ -14,7 +14,7 @@ import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
 import { notifyError } from './notifications';
 
-function GetChannels(currentChannelId, сhannelSchema) {
+const GetChannels = (currentChannelId, сhannelSchema) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector(selectors.selectAll);
@@ -169,9 +169,9 @@ function GetChannels(currentChannelId, сhannelSchema) {
     </ul>
 
   );
-}
+};
 
-function ChannelBox({ currentChannelId, setCurrentChannelId }) {
+const ChannelBox = ({ currentChannelId, setCurrentChannelId }) => {
   const { t } = useTranslation();
 
   const net = useContext(NetStatusContext);
@@ -257,6 +257,6 @@ function ChannelBox({ currentChannelId, setCurrentChannelId }) {
       </Row>
     </>
   );
-}
+};
 
 export default ChannelBox;

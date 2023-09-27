@@ -11,7 +11,7 @@ import { AuthContext } from '../contexts';
 import Card from './CardLogin';
 import { notifyError } from './notifications';
 
-function RegistrationForm() {
+const RegistrationForm = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -102,14 +102,12 @@ function RegistrationForm() {
       )}
     </Formik>
   );
-}
+};
 
-function BuildPage() {
-  return (
-    <Card>
-      <RegistrationForm />
-    </Card>
-  );
-}
+const BuildPage = () => (
+  <Card>
+    <RegistrationForm />
+  </Card>
+);
 
 export default BuildPage;
