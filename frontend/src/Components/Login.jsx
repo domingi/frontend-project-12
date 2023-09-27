@@ -17,14 +17,14 @@ function RegistrationForm() {
   const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
 
-  const SignupSchema = Yup.object().shape({
-    username: Yup.string().required(t('errors.requiredName')),
-    password: Yup.string().min(3, t('errors.shortPassword')).required(t('errors.requiredPassword')),
+  const LoginSchema = Yup.object().shape({
+    username: Yup.string().required(t('errors.required')),
+    password: Yup.string().required(t('errors.required')),
   });
 
   return (
     <Formik
-      validationSchema={SignupSchema}
+      validationSchema={LoginSchema}
       validateOnChange={false}
       onSubmit={(values) => {
         axios.post('/api/v1/login', values)
@@ -52,28 +52,37 @@ function RegistrationForm() {
       }}
     >
       {({
-        handleSubmit, handleChange, values, errors,
+        handleSubmit, handleChange, values, errors, validateField,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
+            <Form.Label htmlFor="username" visuallyHidden>{t('login.username')}</Form.Label>
             <Form.Control
               type="text"
               name="username"
+              id="username"
               placeholder={t('login.username')}
               value={values.username}
               onChange={handleChange}
               isInvalid={!!errors.username || !isValidated}
+              autoFocus
+              validate={LoginSchema}
+              onBlur={() => validateField('username')}
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.username}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="mb-3">
+            <Form.Label htmlFor="password" visuallyHidden>{t('login.password')}</Form.Label>
             <Form.Control
               type="password"
               name="password"
+              id="password"
               placeholder={t('login.password')}
               value={values.password}
               onChange={handleChange}
               isInvalid={!!errors.password || !isValidated}
+              validate={LoginSchema}
+              onBlur={() => validateField('password')}
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
