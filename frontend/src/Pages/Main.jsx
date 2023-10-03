@@ -49,7 +49,7 @@ const MainPage = () => {
   }, [navigate, dispatch, auth, t]);
 
   return (
-    <Container className="h-100 overflow-hidden shadow-sm">
+    <Container className="h-100 overflow-hidden shadow-sm my-3">
       <Row className="justify-content-center align-items-center h-100 shadow">
         <Col xs={4} md={2} className="bg-light shadow h-100 d-flex flex-column">
           <ChannelBox currentChannelId={currentChannelId} />
