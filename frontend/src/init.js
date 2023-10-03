@@ -7,10 +7,8 @@ import en from './locales/en.json';
 import { actions as channelsActions } from './slices/channelSlice';
 import { actions as messagesActions } from './slices/messagesSlice';
 import store from './slices/index';
-import { notifySucces } from './Components/notifications';
 
 const { dispatch } = store;
-const { getState } = store;
 
 const resources = {
   ru: {
@@ -40,22 +38,14 @@ export default () => {
 
   socket.on('renameChannel', (channel) => {
     dispatch(channelsActions.updateOne({ id: channel.id, changes: { ...channel } }));
-    notifySucces(i18n.t('notify.rename'));
   });
 
   socket.on('removeChannel', ({ id }) => {
     dispatch(channelsActions.removeOne(id));
-    const { channels: { currentId } } = getState();
-    if (id === currentId) {
-      dispatch(channelsActions.setCurrentId(1));
-    }
-    notifySucces(i18n.t('notify.remove'));
   });
 
   socket.on('newChannel', (channel) => {
     dispatch(channelsActions.addOne(channel));
-    dispatch(channelsActions.setCurrentId(channel.id));
-    notifySucces(i18n.t('notify.add'));
   });
 
   socket.on('newMessage', (messageWithId) => {

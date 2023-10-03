@@ -7,8 +7,8 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Card from './CardLogin';
-import { notifyError } from './notifications';
+import Card from '../Components/CardLogin';
+import { notifyError } from '../Components/notifications';
 
 const RegistrationForm = () => {
   const navigate = useNavigate();

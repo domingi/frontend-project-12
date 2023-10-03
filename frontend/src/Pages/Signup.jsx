@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
-import Card from './CardSignup';
-import { notifyError } from './notifications';
+import Card from '../Components/CardSignup';
+import { notifyError } from '../Components/notifications';
 
 const SignupForm = () => {
   const auth = useContext(AuthContext);
@@ -37,6 +37,7 @@ const SignupForm = () => {
             auth.logIn();
             setValidated(true);
             const { username } = values;
+            localStorage.setItem('username', username);
             auth.setUser(username);
             setFetched(false);
             navigate('/');

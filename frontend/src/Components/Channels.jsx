@@ -1,24 +1,36 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useContext } from 'react';
+import React, {
+  useState, useContext, useRef, useEffect,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Row, Col, Form, Button, Modal,
+  Form, Button, Modal,
 } from 'react-bootstrap';
 import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { truncate } from 'lodash';
 import { NetStatusContext } from '../contexts';
 import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
-import { notifyError } from './notifications';
+import { notifyError, notifySucces } from './notifications';
+
+const normalizeName = (name) => truncate(name, { length: 10 });
 
 const GetChannels = (currentChannelId, сhannelSchema) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector(selectors.selectAll);
   const net = useContext(NetStatusContext);
+
+  const channelName = useRef(null);
+  useEffect(() => {
+    if (channelName.current !== null) {
+      channelName.current.select();
+    }
+  });
 
   const handleClick = (id) => {
     dispatch(actions.setCurrentId(id));
@@ -41,8 +53,14 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
       if (response.status !== 'ok') {
         net.setStatus(false);
         notifyError(t('notify.socketError'));
-      } else {
+      }
+      if (response.status === 'ok') {
         net.setStatus(true);
+        console.log(channels);
+        notifySucces(t('notify.remove'));
+        if (id === currentChannelId) {
+          dispatch(actions.setCurrentId(1));
+        }
       }
     });
     handleCloseModalRemove();
@@ -62,11 +80,10 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
       const classesForDropdown = cn('dropdown-toggle', 'btn', { 'btn-secondary': id === currentChannelId });
       if (removable) {
         return (
-          <li className="nav-item w-100" key={name}>
+          <li className="nav-item" key={name}>
             <div className="btn-group w-100" role="group">
               <button type="button" className={classes} onClick={() => handleClick(id)}>
-                #
-                {' '}
+                #&nbsp;
                 {name}
               </button>
               <div className="btn-group" role="group">
@@ -83,17 +100,17 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
         );
       }
       return (
-        <li className="nav-item w-100" key={name}>
+        <li className="nav-item" key={name}>
           <button type="button" className={classes} onClick={() => handleClick(id)}>
-            #
-            {' '}
+            #&nbsp;
             {name}
           </button>
         </li>
       );
     });
+
   return (
-    <ul className="nav flex-column">
+    <>
       {list}
       <Modal show={showModalRemove} onHide={handleCloseModalRemove}>
         <Modal.Header closeButton>
@@ -118,13 +135,16 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
           onSubmit={(values) => {
             handleCloseModalRename();
             const { id } = choosenChannel;
-            const channel = { name: values.channel, id };
+            const channel = { name: normalizeName(values.channel), id };
             socket.emit('renameChannel', channel, (response) => {
               if (response.status !== 'ok') {
                 net.setStatus(false);
                 notifyError(t('notify.socketError'));
-              } else {
+              }
+              if (response.status === 'ok') {
                 net.setStatus(true);
+                notifySucces(t('notify.rename'));
+                console.log(сhannelSchema);
               }
             });
           }}
@@ -150,6 +170,7 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
                     onChange={handleChange}
                     isInvalid={!!errors.channel}
                     autoFocus
+                    ref={channelName}
                   />
                   <Form.Control.Feedback type="invalid">{errors.channel}</Form.Control.Feedback>
                 </Form.Group>
@@ -166,13 +187,14 @@ const GetChannels = (currentChannelId, сhannelSchema) => {
           )}
         </Formik>
       </Modal>
-    </ul>
-
+    </>
   );
 };
 
-const ChannelBox = ({ currentChannelId, setCurrentChannelId }) => {
+const ChannelBox = ({ currentChannelId }) => {
   const { t } = useTranslation();
+  const channelWindow = useRef(null);
+  const dispatch = useDispatch();
 
   const net = useContext(NetStatusContext);
 
@@ -202,13 +224,20 @@ const ChannelBox = ({ currentChannelId, setCurrentChannelId }) => {
           validateOnChange={false}
           onSubmit={(values) => {
             handleCloseModal();
-            const channel = { name: values.channel, removable: true };
+            const channel = { name: normalizeName(values.channel), removable: true };
             socket.emit('newChannel', channel, (response) => {
               if (response.status !== 'ok') {
                 net.setStatus(false);
                 notifyError(t('notify.socketError'));
-              } else {
+              }
+              if (response.status === 'ok') {
                 net.setStatus(true);
+                dispatch(actions.setCurrentId(response.data.id));
+                notifySucces(t('notify.add'));
+                console.log(channelWindow.current.scrollHeight);
+                if (channelWindow.current !== null) {
+                  channelWindow.current.scrollTop = channelWindow.current.scrollHeight;
+                }
               }
             });
           }}
@@ -250,11 +279,9 @@ const ChannelBox = ({ currentChannelId, setCurrentChannelId }) => {
           )}
         </Formik>
       </Modal>
-      <Row>
-        <Col className="p-2">
-          {GetChannels(currentChannelId, setCurrentChannelId, сhannelSchema)}
-        </Col>
-      </Row>
+      <ul className="nav flex-column overflow-auto h-100 d-block pb-3" ref={channelWindow}>
+        {GetChannels(currentChannelId, сhannelSchema)}
+      </ul>
     </>
   );
 };

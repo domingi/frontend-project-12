@@ -12,6 +12,13 @@ import socket from '../socket';
 import { notifyError } from './notifications';
 
 export const Chat = ({ currentChannelId }) => {
+  const chatWindow = useRef(null);
+  useEffect(() => {
+    if (chatWindow.current !== null) {
+      chatWindow.current.scrollTop = chatWindow.current.scrollHeight;
+    }
+  });
+
   const messages = useSelector(selectors.selectAll);
   if (messages.length === 0) return null;
   const messagesForChannel = messages.filter(({ channelId }) => channelId === currentChannelId);
@@ -26,7 +33,11 @@ export const Chat = ({ currentChannelId }) => {
         {body}
       </p>
     ));
-  return list;
+  return (
+    <div className="overflow-auto p-3 text-break" ref={chatWindow}>
+      {list}
+    </div>
+  );
 };
 
 export const MessageInput = ({ currentChannelId }) => {
@@ -43,6 +54,7 @@ export const MessageInput = ({ currentChannelId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(auth);
     const filteredMessage = filter.clean(newMessage);
     const message = { body: filteredMessage, user: auth.username, channelId: currentChannelId };
     socket.emit('newMessage', message, (response) => {
@@ -57,35 +69,37 @@ export const MessageInput = ({ currentChannelId }) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <InputGroup className="mb-3 border rounded-2">
-        <Form.Control
-          id="chatInput"
-          name="chatInput"
-          placeholder={t('chatbox.input')}
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          disabled={!net.status}
-          ref={inputRef}
-          className="border-0 rounded-2"
-          aria-label={t('chatbox.newMessage')}
-        />
-        <Form.Label htmlFor="chatInput" visuallyHidden>{t('chatbox.input')}</Form.Label>
-        <Button
-          variant={null}
-          disabled={newMessage === ''}
-          className="border-0"
-        >
-          <i className="bi bi-arrow-right-square" />
-        </Button>
+    <div className="mt-auto p-3">
+      <Form onSubmit={handleSubmit}>
+        <InputGroup className="mb-3 border rounded-2">
+          <Form.Control
+            id="chatInput"
+            name="chatInput"
+            placeholder={t('chatbox.input')}
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            disabled={!net.status}
+            ref={inputRef}
+            className="border-0 rounded-2"
+            aria-label={t('chatbox.newMessage')}
+          />
+          <Form.Label htmlFor="chatInput" visuallyHidden>{t('chatbox.input')}</Form.Label>
+          <Button
+            variant={null}
+            disabled={newMessage === ''}
+            className="border-0"
+          >
+            <i className="bi bi-arrow-right-square" />
+          </Button>
 
-      </InputGroup>
-      {!net.status
-        && (
-        <p className="text-danger small">
-          {t('errors.net')}
-        </p>
-        )}
-    </Form>
+        </InputGroup>
+        {!net.status
+          && (
+          <p className="text-danger small">
+            {t('errors.net')}
+          </p>
+          )}
+      </Form>
+    </div>
   );
 };

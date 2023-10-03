@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import { Provider, ErrorBoundary } from '@rollbar/react';
-import MainPage from './Components/Main';
-import LoginPage from './Components/Login';
-import SignupPage from './Components/Signup';
-import Error404 from './Components/Error404';
+import MainPage from './Pages/Main';
+import LoginPage from './Pages/Login';
+import SignupPage from './Pages/Signup';
+import Error404 from './Pages/Error404';
 import Navbar from './Components/Navbar';
 import { AuthContext, NetStatusContext } from './contexts';
 

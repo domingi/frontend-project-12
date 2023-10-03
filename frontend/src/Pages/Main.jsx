@@ -10,10 +10,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { actions as channelsActions, selectors } from '../slices/channelSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
-import { Chat, MessageInput } from './Chatbox';
+import { Chat, MessageInput } from '../Components/Chatbox';
 import { AuthContext } from '../contexts';
-import ChannelBox from './Channels';
-import { notifyError } from './notifications';
+import ChannelBox from '../Components/Channels';
+import { notifyError } from '../Components/notifications';
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -40,7 +40,6 @@ const MainPage = () => {
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
-        dispatch(channelsActions.setCurrentId(response.data.currentChannelId));
         auth.logIn();
         auth.setUser(localStorage.getItem('username'));
       }).catch(() => {
@@ -50,9 +49,9 @@ const MainPage = () => {
   }, [navigate, dispatch, auth, t]);
 
   return (
-    <Container className="m-5 h-100 overflow-hidden shadow-sm">
+    <Container className="h-100 overflow-hidden shadow-sm">
       <Row className="justify-content-center align-items-center h-100 shadow">
-        <Col xs={4} md={2} className="bg-light shadow h-100">
+        <Col xs={4} md={2} className="bg-light shadow h-100 d-flex flex-column">
           <ChannelBox currentChannelId={currentChannelId} />
         </Col>
         <Col className="h-100 p-0">
@@ -64,12 +63,8 @@ const MainPage = () => {
                 {currentChannel}
               </b>
             </div>
-            <div className="overflow-auto p-3">
-              <Chat currentChannelId={currentChannelId} />
-            </div>
-            <div className="mt-auto p-3">
-              <MessageInput currentChannelId={currentChannelId} />
-            </div>
+            <Chat currentChannelId={currentChannelId} />
+            <MessageInput currentChannelId={currentChannelId} />
           </div>
         </Col>
       </Row>
