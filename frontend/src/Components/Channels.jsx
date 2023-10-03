@@ -17,7 +17,7 @@ import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
 import { notifyError, notifySucces } from './notifications';
 
-const normalizeName = (name) => truncate(name, { length: 12 });
+const normalizeName = (name) => truncate(name, { length: 16 });
 
 const GetChannels = (currentChannelId, сhannelSchema) => {
   const { t } = useTranslation();
