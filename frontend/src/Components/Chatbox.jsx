@@ -88,6 +88,7 @@ export const MessageInput = ({ currentChannelId }) => {
             variant={null}
             disabled={newMessage === ''}
             className="border-0"
+            type="submit"
           >
             <i className="bi bi-arrow-right-square" />
           </Button>

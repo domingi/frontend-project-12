@@ -12,7 +12,7 @@ import { actions as channelsActions, selectors } from '../slices/channelSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import { Chat, MessageInput } from '../Components/Chatbox';
 import { AuthContext } from '../contexts';
-import ChannelBox from '../Components/Channels';
+import ChannelBox from '../Components/ChannelBox';
 import { notifyError } from '../Components/notifications';
 
 const MainPage = () => {

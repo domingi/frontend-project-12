@@ -19,7 +19,7 @@ import { notifyError, notifySucces } from './notifications';
 
 const normalizeName = (name) => truncate(name, { length: 16 });
 
-const GetChannels = (currentChannelId, сhannelSchema) => {
+const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector(selectors.selectAll);
@@ -195,7 +195,6 @@ const ChannelBox = ({ currentChannelId }) => {
   const { t } = useTranslation();
   const channelWindow = useRef(null);
   const dispatch = useDispatch();
-
   const net = useContext(NetStatusContext);
 
   const channels = useSelector(selectors.selectAll);
@@ -232,11 +231,13 @@ const ChannelBox = ({ currentChannelId }) => {
               }
               if (response.status === 'ok') {
                 net.setStatus(true);
+                dispatch(actions.addOne(response.data));
                 dispatch(actions.setCurrentId(response.data.id));
                 notifySucces(t('notify.add'));
-                console.log(channelWindow.current.scrollHeight);
                 if (channelWindow.current !== null) {
-                  channelWindow.current.scrollTop = channelWindow.current.scrollHeight;
+                  setTimeout(() => {
+                    channelWindow.current.scrollTop = channelWindow.current.scrollHeight;
+                  }, 500);
                 }
               }
             });
@@ -280,7 +281,7 @@ const ChannelBox = ({ currentChannelId }) => {
         </Formik>
       </Modal>
       <ul className="nav flex-column overflow-auto h-100 d-block pb-3" ref={channelWindow}>
-        {GetChannels(currentChannelId, сhannelSchema)}
+        <ChannelList props={{ currentChannelId, сhannelSchema }} />
       </ul>
     </>
   );
