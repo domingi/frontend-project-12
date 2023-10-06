@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import filter from 'leo-profanity';
+import cn from 'classnames';
 import { selectors } from '../slices/messagesSlice';
 import { AuthContext, NetStatusContext } from '../contexts';
 import socket from '../socket';
@@ -19,20 +20,29 @@ export const Chat = ({ currentChannelId }) => {
     }
   });
 
+  const currentUser = localStorage.getItem('username');
   const messages = useSelector(selectors.selectAll);
   if (messages.length === 0) return null;
   const messagesForChannel = messages.filter(({ channelId }) => channelId === currentChannelId);
+
   const list = Object.values(messagesForChannel)
-    .map(({ id, body, user }) => (
-      <p key={id}>
-        <span className="fw-bold">
-          {user}
-          :
-        </span>
-        {' '}
-        {body}
-      </p>
-    ));
+    .map(({ id, body, user }) => {
+      const classes = cn('message', 'text-white', 'px-3', 'py-1', 'rounded-5', {
+        'bg-dark': user === currentUser,
+        'bg-secondary': user !== currentUser,
+      });
+      return (
+        <p key={id} className={classes}>
+          <span className="fw-bold">
+            {user}
+            :
+          </span>
+          {' '}
+          {body}
+        </p>
+      );
+    });
+
   return (
     <div className="overflow-auto p-3 text-break" ref={chatWindow}>
       {list}
