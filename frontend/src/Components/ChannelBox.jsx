@@ -56,11 +56,7 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
       }
       if (response.status === 'ok') {
         net.setStatus(true);
-        console.log(channels);
         notifySucces(t('notify.remove'));
-        if (id === currentChannelId) {
-          dispatch(actions.setCurrentId(1));
-        }
       }
     });
     handleCloseModalRemove();

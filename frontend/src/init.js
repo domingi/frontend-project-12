@@ -41,7 +41,12 @@ export default () => {
   });
 
   socket.on('removeChannel', ({ id }) => {
+    const state = store.getState();
     dispatch(channelsActions.removeOne(id));
+    console.log(state.channels);
+    if (id === state.channels.currentId) {
+      dispatch(channelsActions.setCurrentId(1));
+    }
   });
 
   socket.on('newChannel', (channel) => {
