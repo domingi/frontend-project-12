@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../Components/CardLogin';
 import { notifyError } from '../Components/notifications';
+import Navbar from '../Components/Navbar';
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
@@ -102,9 +103,12 @@ const RegistrationForm = () => {
 };
 
 const BuildPage = () => (
-  <Card>
-    <RegistrationForm />
-  </Card>
+  <>
+    <Navbar />
+    <Card>
+      <RegistrationForm />
+    </Card>
+  </>
 );
 
 export default BuildPage;

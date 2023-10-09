@@ -1,14 +1,10 @@
 /* eslint-disable react/prop-types */
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import React, { useState } from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import { Provider, ErrorBoundary } from '@rollbar/react';
-import MainPage from './Pages/Main';
-import LoginPage from './Pages/Login';
-import SignupPage from './Pages/Signup';
-import Error404 from './Pages/Error404';
-import Navbar from './Components/Navbar';
+import router from './routes/index';
 import { AuthContext, NetStatusContext } from './contexts';
 
 const rollbarConfig = {
@@ -57,16 +53,8 @@ const App = () => (
     <ErrorBoundary>
       <NetStatusProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <Navbar />
-            <ToastContainer />
-            <Routes>
-              <Route path="/" element={<MainPage />} />
-              <Route path="login" element={<LoginPage />} />
-              <Route path="signup" element={<SignupPage />} />
-              <Route path="*" element={<Error404 />} />
-            </Routes>
-          </BrowserRouter>
+          <ToastContainer />
+          <RouterProvider router={router} />
         </AuthProvider>
       </NetStatusProvider>
     </ErrorBoundary>

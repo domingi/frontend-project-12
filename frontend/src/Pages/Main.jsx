@@ -14,6 +14,7 @@ import { Chat, MessageInput } from '../Components/Chatbox';
 import { AuthContext } from '../contexts';
 import ChannelBox from '../Components/ChannelBox';
 import { notifyError } from '../Components/notifications';
+import Navbar from '../Components/Navbar';
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -49,26 +50,29 @@ const MainPage = () => {
   }, [navigate, dispatch, auth, t]);
 
   return (
-    <Container className="h-100 overflow-hidden shadow-sm my-3">
-      <Row className="justify-content-center align-items-center h-100 shadow">
-        <Col xs={4} md={2} className="bg-light shadow h-100 d-flex flex-column">
-          <ChannelBox currentChannelId={currentChannelId} />
-        </Col>
-        <Col className="h-100 p-0">
-          <div className="d-flex flex-column h-100">
-            <div className="bg-light shadow-sm p-3">
-              <b>
-                #
-                {' '}
-                {currentChannel}
-              </b>
+    <>
+      <Navbar />
+      <Container className="h-100 overflow-hidden shadow-sm my-3">
+        <Row className="justify-content-center align-items-center h-100 shadow">
+          <Col xs={4} md={2} className="bg-light shadow h-100 d-flex flex-column">
+            <ChannelBox currentChannelId={currentChannelId} />
+          </Col>
+          <Col className="h-100 p-0">
+            <div className="d-flex flex-column h-100">
+              <div className="bg-light shadow-sm p-3">
+                <b>
+                  #
+                  {' '}
+                  {currentChannel}
+                </b>
+              </div>
+              <Chat currentChannelId={currentChannelId} />
+              <MessageInput currentChannelId={currentChannelId} />
             </div>
-            <Chat currentChannelId={currentChannelId} />
-            <MessageInput currentChannelId={currentChannelId} />
-          </div>
-        </Col>
-      </Row>
-    </Container>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

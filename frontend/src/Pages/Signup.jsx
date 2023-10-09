@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts';
 import Card from '../Components/CardSignup';
 import { notifyError } from '../Components/notifications';
+import Navbar from '../Components/Navbar';
 
 const SignupForm = () => {
   const auth = useContext(AuthContext);
@@ -129,9 +130,12 @@ const SignupForm = () => {
 };
 
 const BuildPage = () => (
-  <Card>
-    <SignupForm />
-  </Card>
+  <>
+    <Navbar />
+    <Card>
+      <SignupForm />
+    </Card>
+  </>
 );
 
 export default BuildPage;

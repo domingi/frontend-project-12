@@ -11,13 +11,10 @@ import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { truncate } from 'lodash';
 import { NetStatusContext } from '../contexts';
 import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
 import { notifyError, notifySucces } from './notifications';
-
-const normalizeName = (name) => truncate(name, { length: 16 });
 
 const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const { t } = useTranslation();
@@ -72,11 +69,11 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
 
   const list = Object.values(channels)
     .map(({ id, name, removable }) => {
-      const classes = cn('btn', 'rounded-0', 'w-100', 'text-start', { 'btn-secondary': id === currentChannelId });
+      const classes = cn('btn', 'rounded-0', 'w-100', 'text-start', 'text-truncate', { 'btn-secondary': id === currentChannelId });
       const classesForDropdown = cn('dropdown-toggle', 'btn', { 'btn-secondary': id === currentChannelId });
       if (removable) {
         return (
-          <li className="nav-item" key={name}>
+          <li className="nav-item w-100" key={name}>
             <div className="btn-group w-100" role="group">
               <button type="button" className={classes} onClick={() => handleClick(id)}>
                 #&nbsp;
@@ -96,7 +93,7 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
         );
       }
       return (
-        <li className="nav-item" key={name}>
+        <li className="nav-item w-100" key={name}>
           <button type="button" className={classes} onClick={() => handleClick(id)}>
             #&nbsp;
             {name}
@@ -131,7 +128,7 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
           onSubmit={(values) => {
             handleCloseModalRename();
             const { id } = choosenChannel;
-            const channel = { name: normalizeName(values.channel), id };
+            const channel = { name: values.channel, id };
             socket.emit('renameChannel', channel, (response) => {
               if (response.status !== 'ok') {
                 net.setStatus(false);
@@ -219,7 +216,7 @@ const ChannelBox = ({ currentChannelId }) => {
           validateOnChange={false}
           onSubmit={(values) => {
             handleCloseModal();
-            const channel = { name: normalizeName(values.channel), removable: true };
+            const channel = { name: values.channel, removable: true };
             socket.emit('newChannel', channel, (response) => {
               if (response.status !== 'ok') {
                 net.setStatus(false);
@@ -276,7 +273,7 @@ const ChannelBox = ({ currentChannelId }) => {
           )}
         </Formik>
       </Modal>
-      <ul className="nav flex-column overflow-auto h-100 d-block pb-3" ref={channelWindow}>
+      <ul className="nav overflow-auto h-100 pb-3 d-block" ref={channelWindow}>
         <ChannelList props={{ currentChannelId, сhannelSchema }} />
       </ul>
     </>
