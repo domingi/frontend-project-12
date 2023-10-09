@@ -5,7 +5,7 @@ import './App.css';
 import { ToastContainer } from 'react-toastify';
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import router from './routes/index';
-import { AuthContext, NetStatusContext } from './contexts';
+import AuthContext from './contexts';
 
 const rollbarConfig = {
   accessToken: '61d76b56e38f45a389dfd33091e7de9c',
@@ -34,29 +34,13 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const NetStatusProvider = ({ children }) => {
-  const [status, setStatus] = useState(true);
-
-  return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
-    <NetStatusContext.Provider value={{
-      status, setStatus,
-    }}
-    >
-      {children}
-    </NetStatusContext.Provider>
-  );
-};
-
 const App = () => (
   <Provider config={rollbarConfig}>
     <ErrorBoundary>
-      <NetStatusProvider>
-        <AuthProvider>
-          <ToastContainer />
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </NetStatusProvider>
+      <AuthProvider>
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </AuthProvider>
     </ErrorBoundary>
   </Provider>
 );

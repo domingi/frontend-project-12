@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from '../contexts';
+import AuthContext from '../contexts';
 import Card from '../Components/CardSignup';
 import { notifyError } from '../Components/notifications';
 import Navbar from '../Components/Navbar';

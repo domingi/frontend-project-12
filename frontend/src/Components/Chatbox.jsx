@@ -8,7 +8,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import filter from 'leo-profanity';
 import cn from 'classnames';
 import { selectors } from '../slices/messagesSlice';
-import { AuthContext, NetStatusContext } from '../contexts';
+import AuthContext from '../contexts';
 import socket from '../socket';
 import { notifyError } from './notifications';
 
@@ -59,8 +59,8 @@ export const MessageInput = ({ currentChannelId }) => {
   });
 
   const [newMessage, setNewMessage] = useState('');
+  const [isConnected, setConnected] = useState(true);
   const auth = useContext(AuthContext);
-  const net = useContext(NetStatusContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,10 +69,10 @@ export const MessageInput = ({ currentChannelId }) => {
     const message = { body: filteredMessage, user: auth.username, channelId: currentChannelId };
     socket.emit('newMessage', message, (response) => {
       if (response.status !== 'ok') {
-        net.setStatus(false);
+        setConnected(false);
         notifyError(t('notify.sendError'));
       } else {
-        net.setStatus(true);
+        setConnected(true);
         setNewMessage('');
       }
     });
@@ -88,7 +88,7 @@ export const MessageInput = ({ currentChannelId }) => {
             placeholder={t('chatbox.input')}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            disabled={!net.status}
+            disabled={!isConnected}
             ref={inputRef}
             className="border-0 rounded-2"
             aria-label={t('chatbox.newMessage')}
@@ -104,7 +104,7 @@ export const MessageInput = ({ currentChannelId }) => {
           </Button>
 
         </InputGroup>
-        {!net.status
+        {!isConnected
           && (
           <p className="text-danger small">
             {t('errors.net')}

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AuthContext } from '../contexts';
+import AuthContext from '../contexts';
 
 const Navbar = () => {
   const auth = useContext(AuthContext);

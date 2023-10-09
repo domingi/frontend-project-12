@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {
-  useState, useContext, useRef, useEffect,
+  useState, useRef, useEffect,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -11,7 +11,6 @@ import cn from 'classnames';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { NetStatusContext } from '../contexts';
 import { actions, selectors } from '../slices/channelSlice';
 import socket from '../socket';
 import { notifyError, notifySucces } from './notifications';
@@ -20,7 +19,6 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const channels = useSelector(selectors.selectAll);
-  const net = useContext(NetStatusContext);
 
   const channelName = useRef(null);
   useEffect(() => {
@@ -48,11 +46,9 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
     socket.emit('removeChannel', { id }, (response) => {
       console.log(response.status);
       if (response.status !== 'ok') {
-        net.setStatus(false);
         notifyError(t('notify.socketError'));
       }
       if (response.status === 'ok') {
-        net.setStatus(true);
         notifySucces(t('notify.remove'));
       }
     });
@@ -131,13 +127,10 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
             const channel = { name: values.channel, id };
             socket.emit('renameChannel', channel, (response) => {
               if (response.status !== 'ok') {
-                net.setStatus(false);
                 notifyError(t('notify.socketError'));
               }
               if (response.status === 'ok') {
-                net.setStatus(true);
                 notifySucces(t('notify.rename'));
-                console.log(сhannelSchema);
               }
             });
           }}
@@ -188,7 +181,6 @@ const ChannelBox = ({ currentChannelId }) => {
   const { t } = useTranslation();
   const channelWindow = useRef(null);
   const dispatch = useDispatch();
-  const net = useContext(NetStatusContext);
 
   const channels = useSelector(selectors.selectAll);
   const channelsNames = Object.values(channels).map((channel) => channel.name);
@@ -219,11 +211,9 @@ const ChannelBox = ({ currentChannelId }) => {
             const channel = { name: values.channel, removable: true };
             socket.emit('newChannel', channel, (response) => {
               if (response.status !== 'ok') {
-                net.setStatus(false);
                 notifyError(t('notify.socketError'));
               }
               if (response.status === 'ok') {
-                net.setStatus(true);
                 dispatch(actions.addOne(response.data));
                 dispatch(actions.setCurrentId(response.data.id));
                 notifySucces(t('notify.add'));
