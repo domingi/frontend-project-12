@@ -34,6 +34,9 @@ const MainPage = () => {
     if (!localStorage.getItem('token')) {
       navigate('/login');
     } else {
+      if (!auth.isLogged) {
+        auth.logInByToken();
+      }
       axios({
         method: 'get',
         url: '/api/v1/data',
@@ -41,8 +44,6 @@ const MainPage = () => {
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
-        auth.logIn();
-        auth.setUser(localStorage.getItem('username'));
       }).catch(() => {
         notifyError(t('notify.serverError'));
       });

@@ -5,17 +5,19 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../Components/CardLogin';
 import { notifyError } from '../Components/notifications';
 import Navbar from '../Components/Navbar';
+import AuthContext from '../contexts';
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
   const [isFetched, setFetched] = useState(false);
+  const auth = useContext(AuthContext);
 
   const LoginSchema = Yup.object().shape({
     username: Yup.string().required(t('errors.required')),
@@ -30,9 +32,9 @@ const RegistrationForm = () => {
         setFetched(true);
         axios.post('/api/v1/login', values)
           .then((response) => {
-            localStorage.setItem('token', response.data.token);
+            const { token } = response.data;
             const { username } = values;
-            localStorage.setItem('username', username);
+            auth.logIn(username, token);
             setValidated(true);
             setFetched(false);
             navigate('/');

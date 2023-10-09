@@ -44,7 +44,6 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const handleClickRemove = () => {
     const { id } = choosenChannel;
     socket.emit('removeChannel', { id }, (response) => {
-      console.log(response.status);
       if (response.status !== 'ok') {
         notifyError(t('notify.socketError'));
       }

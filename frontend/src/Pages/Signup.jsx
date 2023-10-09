@@ -34,12 +34,10 @@ const SignupForm = () => {
         setFetched(true);
         axios.post('/api/v1/signup', values)
           .then((response) => {
-            localStorage.setItem('token', response.data.token);
-            auth.logIn();
-            setValidated(true);
+            const { token } = response.data;
             const { username } = values;
-            localStorage.setItem('username', username);
-            auth.setUser(username);
+            auth.logIn(username, token);
+            setValidated(true);
             setFetched(false);
             navigate('/');
           })

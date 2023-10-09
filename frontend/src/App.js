@@ -8,25 +8,34 @@ import router from './routes/index';
 import AuthContext from './contexts';
 
 const rollbarConfig = {
-  accessToken: '61d76b56e38f45a389dfd33091e7de9c',
+  accessToken: process.env.REACT_APP_ROLLBAR_CONFIG,
   environment: 'production',
 };
 
 const AuthProvider = ({ children }) => {
   const [isLogged, setLoggedIn] = useState(false);
-  const logIn = () => {
+  const [username, setUser] = useState(null);
+
+  const logIn = (name, token) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('username', name);
+    setUser(name);
+    setLoggedIn(true);
+  };
+  const logInByToken = () => {
+    setUser(localStorage.getItem('username'));
     setLoggedIn(true);
   };
   const logOut = () => {
+    localStorage.clear();
+    setUser(null);
     setLoggedIn(false);
   };
-
-  const [username, setUser] = useState('');
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      isLogged, logIn, logOut, username, setUser,
+      isLogged, logIn, logInByToken, logOut, username,
     }}
     >
       {children}

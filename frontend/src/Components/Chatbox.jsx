@@ -64,7 +64,6 @@ export const MessageInput = ({ currentChannelId }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(auth);
     const filteredMessage = filter.clean(newMessage);
     const message = { body: filteredMessage, user: auth.username, channelId: currentChannelId };
     socket.emit('newMessage', message, (response) => {
