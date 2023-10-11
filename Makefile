@@ -17,4 +17,4 @@ start:
 	make start-backend & make start-frontend
 
 build:
-	npx run build & make start-backend
+	npm run build & make start-backend
