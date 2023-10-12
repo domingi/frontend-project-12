@@ -44,8 +44,15 @@ const MainPage = () => {
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
-      }).catch(() => {
-        notifyError(t('notify.serverError'));
+      }).catch((e) => {
+        if (e.code === 'ERR_BAD_REQUEST') {
+          if (e.response.status === 401) {
+            auth.logOut();
+          }
+        }
+        if (e.code === 'ERR_NETWORK') {
+          notifyError(t('notify.serverError'));
+        }
       });
     }
   }, [navigate, dispatch, auth, t]);
