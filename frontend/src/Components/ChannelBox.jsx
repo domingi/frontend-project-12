@@ -184,8 +184,10 @@ const ChannelBox = ({ currentChannelId }) => {
   const channels = useSelector(selectors.selectAll);
   const channelsNames = Object.values(channels).map((channel) => channel.name);
   const сhannelSchema = Yup.object().shape({
-    channel: Yup.string().min(3, 'От 3 до 20 символов').max(20, 'От 3 до 20 символов').required('Введите название канала')
-      .notOneOf(channelsNames, 'Должно быть уникальным'),
+    channel: Yup.string().required(t('errors.required'))
+      .min(3, t('errors.nameLength')).max(20, t('errors.nameLength'))
+      .trim()
+      .notOneOf(channelsNames, t('errors.wrongName')),
   });
 
   const [showModal, setShow] = useState(false);

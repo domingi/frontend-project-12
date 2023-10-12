@@ -14,3 +14,9 @@ login: admin
 password: admin
 ```
 ...or sign up like new user.
+
+### Run
+```
+make install
+make start
+```
