@@ -9,8 +9,7 @@ import filter from 'leo-profanity';
 import cn from 'classnames';
 import { selectors } from '../slices/messagesSlice';
 import AuthContext from '../contexts';
-import socket from '../socket';
-import { notifyError } from './notifications';
+import { emits } from '../socket';
 
 export const Chat = ({ currentChannelId }) => {
   const chatWindow = useRef(null);
@@ -66,15 +65,7 @@ export const MessageInput = ({ currentChannelId }) => {
     e.preventDefault();
     const filteredMessage = filter.clean(newMessage);
     const message = { body: filteredMessage, user: auth.username, channelId: currentChannelId };
-    socket.emit('newMessage', message, (response) => {
-      if (response.status !== 'ok') {
-        setConnected(false);
-        notifyError(t('notify.sendError'));
-      } else {
-        setConnected(true);
-        setNewMessage('');
-      }
-    });
+    emits.newMessage(message, setConnected, setNewMessage);
   };
 
   return (

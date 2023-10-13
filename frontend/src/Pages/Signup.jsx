@@ -11,6 +11,7 @@ import AuthContext from '../contexts';
 import Card from '../Components/CardSignup';
 import { notifyError } from '../Components/notifications';
 import Navbar from '../Components/Navbar';
+import pathes from '../routes/index';
 
 const SignupForm = () => {
   const auth = useContext(AuthContext);
@@ -39,7 +40,7 @@ const SignupForm = () => {
             auth.logIn(username, token);
             setValidated(true);
             setFetched(false);
-            navigate('/');
+            navigate(pathes.main);
           })
           .catch((e) => {
             setFetched(false);

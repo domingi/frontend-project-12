@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import { Provider, ErrorBoundary } from '@rollbar/react';
-import router from './routes/index';
+import router from './routes/router';
 import AuthContext from './contexts';
 
 const rollbarConfig = {
@@ -22,20 +22,25 @@ const AuthProvider = ({ children }) => {
     setUser(name);
     setLoggedIn(true);
   };
-  const logInByToken = () => {
-    setUser(localStorage.getItem('username'));
-    setLoggedIn(true);
-  };
   const logOut = () => {
     localStorage.clear();
     setUser(null);
     setLoggedIn(false);
   };
+  const checkAndAuth = () => {
+    if (isLogged) return true;
+    if (localStorage.getItem('token')) {
+      logIn(localStorage.getItem('username'), localStorage.getItem('token'));
+      return true;
+    }
+    return false;
+  };
+  const getToken = () => localStorage.getItem('token');
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <AuthContext.Provider value={{
-      isLogged, logIn, logInByToken, logOut, username,
+      isLogged, logIn, checkAndAuth, logOut, username, getToken,
     }}
     >
       {children}

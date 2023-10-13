@@ -11,6 +11,7 @@ import Card from '../Components/CardLogin';
 import { notifyError } from '../Components/notifications';
 import Navbar from '../Components/Navbar';
 import AuthContext from '../contexts';
+import pathes from '../routes/index';
 
 const RegistrationForm = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const RegistrationForm = () => {
             auth.logIn(username, token);
             setValidated(true);
             setFetched(false);
-            navigate('/');
+            navigate(pathes.main);
           })
           .catch((e) => {
             setFetched(false);

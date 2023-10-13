@@ -12,8 +12,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { actions, selectors } from '../slices/channelSlice';
-import socket from '../socket';
-import { notifyError, notifySucces } from './notifications';
+import { emits } from '../socket';
 
 const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const { t } = useTranslation();
@@ -43,14 +42,7 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
 
   const handleClickRemove = () => {
     const { id } = choosenChannel;
-    socket.emit('removeChannel', { id }, (response) => {
-      if (response.status !== 'ok') {
-        notifyError(t('notify.socketError'));
-      }
-      if (response.status === 'ok') {
-        notifySucces(t('notify.remove'));
-      }
-    });
+    emits.removeChannel(id);
     handleCloseModalRemove();
   };
 
@@ -124,14 +116,7 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
             handleCloseModalRename();
             const { id } = choosenChannel;
             const channel = { name: values.channel, id };
-            socket.emit('renameChannel', channel, (response) => {
-              if (response.status !== 'ok') {
-                notifyError(t('notify.socketError'));
-              }
-              if (response.status === 'ok') {
-                notifySucces(t('notify.rename'));
-              }
-            });
+            emits.renameChannel(channel);
           }}
           initialValues={{
             channel: choosenChannel.name,
@@ -179,7 +164,6 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
 const ChannelBox = ({ currentChannelId }) => {
   const { t } = useTranslation();
   const channelWindow = useRef(null);
-  const dispatch = useDispatch();
 
   const channels = useSelector(selectors.selectAll);
   const channelsNames = Object.values(channels).map((channel) => channel.name);
@@ -210,21 +194,12 @@ const ChannelBox = ({ currentChannelId }) => {
           onSubmit={(values) => {
             handleCloseModal();
             const channel = { name: values.channel, removable: true };
-            socket.emit('newChannel', channel, (response) => {
-              if (response.status !== 'ok') {
-                notifyError(t('notify.socketError'));
-              }
-              if (response.status === 'ok') {
-                dispatch(actions.addOne(response.data));
-                dispatch(actions.setCurrentId(response.data.id));
-                notifySucces(t('notify.add'));
-                if (channelWindow.current !== null) {
-                  setTimeout(() => {
-                    channelWindow.current.scrollTop = channelWindow.current.scrollHeight;
-                  }, 500);
-                }
-              }
-            });
+            emits.newChannel(channel);
+            if (channelWindow.current !== null) {
+              setTimeout(() => {
+                channelWindow.current.scrollTop = channelWindow.current.scrollHeight;
+              }, 500);
+            }
           }}
           initialValues={{
             channel: '',

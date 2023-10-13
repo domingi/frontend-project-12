@@ -15,6 +15,7 @@ import AuthContext from '../contexts';
 import ChannelBox from '../Components/ChannelBox';
 import { notifyError } from '../Components/notifications';
 import Navbar from '../Components/Navbar';
+import pathes from '../routes/index';
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -31,16 +32,12 @@ const MainPage = () => {
   });
 
   useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
-    } else {
-      if (!auth.isLogged) {
-        auth.logInByToken();
-      }
+    console.log(auth.checkAndAuth());
+    if (auth.checkAndAuth()) {
       axios({
         method: 'get',
         url: '/api/v1/data',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${auth.getToken()}` },
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
@@ -54,6 +51,8 @@ const MainPage = () => {
           notifyError(t('notify.serverError'));
         }
       });
+    } else {
+      navigate(pathes.login);
     }
   }, [navigate, dispatch, auth, t]);
 
