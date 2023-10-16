@@ -32,7 +32,6 @@ const MainPage = () => {
   });
 
   useEffect(() => {
-    console.log(auth.checkAndAuth());
     if (auth.checkAndAuth()) {
       axios({
         method: 'get',
