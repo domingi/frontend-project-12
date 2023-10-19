@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { RouterProvider } from 'react-router-dom';
 import React, { useState } from 'react';
-import './App.css';
 import { ToastContainer } from 'react-toastify';
 import { Provider, ErrorBoundary } from '@rollbar/react';
 import router from './routes/router';

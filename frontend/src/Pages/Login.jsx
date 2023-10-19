@@ -31,7 +31,7 @@ const RegistrationForm = () => {
       validateOnChange={false}
       onSubmit={(values) => {
         setFetched(true);
-        axios.post('/api/v1/login', values)
+        axios.post(pathes.api.login, values)
           .then((response) => {
             const { token } = response.data;
             const { username } = values;
@@ -42,11 +42,12 @@ const RegistrationForm = () => {
           })
           .catch((e) => {
             setFetched(false);
-            if (e.code === 'ERR_BAD_REQUEST') {
-              setValidated(false);
-            }
-            if (e.code === 'ERR_NETWORK') {
-              notifyError(t('notify.serverError'));
+            switch (e.response?.status) {
+              case 401:
+                setValidated(false);
+                break;
+              default:
+                notifyError(t('notify.serverError'));
             }
           });
       }}
@@ -108,9 +109,11 @@ const RegistrationForm = () => {
 const BuildPage = () => (
   <>
     <Navbar />
-    <Card>
-      <RegistrationForm />
-    </Card>
+    <div className="d-flex justify-content-center align-items-center h-100">
+      <Card>
+        <RegistrationForm />
+      </Card>
+    </div>
   </>
 );
 

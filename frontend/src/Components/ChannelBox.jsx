@@ -9,7 +9,7 @@ import cn from 'classnames';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { actions, selectors } from '../slices/channelSlice';
-import { showRename, showRemove, showNew } from '../slices/modalSlice';
+import { show } from '../slices/modalSlice';
 import ModalRename from './ModalRename';
 import ModalRemove from './ModalRemove';
 import ModalNewChannel from './ModalNewChannel';
@@ -35,13 +35,13 @@ const ChannelList = ({ props: { currentChannelId, сhannelSchema } }) => {
   const handleShowModalRemove = (e, id) => {
     e.preventDefault();
     setChoosen({ id });
-    dispatch(showRemove());
+    dispatch(show('modalRemove'));
   };
 
   const handleShowModalRename = (e, id, name) => {
     e.preventDefault();
     setChoosen({ id, name });
-    dispatch(showRename());
+    dispatch(show('modalRename'));
   };
 
   const list = Object.values(channels)
@@ -103,7 +103,7 @@ const ChannelBox = ({ currentChannelId }) => {
       .notOneOf(channelsNames, t('errors.wrongName')),
   });
 
-  const handleShowModal = () => dispatch(showNew());
+  const handleShowModal = () => dispatch(show('modalNew'));
 
   return (
     <>

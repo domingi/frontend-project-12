@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AuthContext from '../contexts';
+import pathes from '../routes/index';
 
 const Navbar = () => {
   const auth = useContext(AuthContext);
@@ -11,7 +12,7 @@ const Navbar = () => {
   const handleClick = () => {
     localStorage.clear();
     auth.logOut();
-    navigate('/login');
+    navigate(pathes.login);
   };
   return (
     <nav className="navbar bg-body-tertiary shadow-sm">

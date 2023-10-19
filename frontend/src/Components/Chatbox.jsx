@@ -69,7 +69,7 @@ export const MessageInput = ({ currentChannelId }) => {
   };
 
   return (
-    <div className="mt-auto p-3">
+    <div className="mt-auto px-3 pt-3">
       <Form onSubmit={handleSubmit}>
         <InputGroup className="mb-3 border rounded-2">
           <Form.Control

@@ -6,15 +6,15 @@ import {
 } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { closeModals } from '../slices/modalSlice';
+import { close } from '../slices/modalSlice';
 import { emits } from '../socket';
 
 const ModalNewChannel = ({ props: { сhannelSchema, channelWindow } }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const isShow = useSelector((state) => state.modals.newChannel);
-  const handleClose = () => dispatch(closeModals());
+  const isShow = useSelector((state) => state.modals.show) === 'modalNew';
+  const handleClose = () => dispatch(close());
 
   return (
     <Modal show={isShow} onHide={handleClose}>

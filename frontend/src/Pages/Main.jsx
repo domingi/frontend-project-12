@@ -35,19 +35,18 @@ const MainPage = () => {
     if (auth.checkAndAuth()) {
       axios({
         method: 'get',
-        url: '/api/v1/data',
+        url: pathes.api.data,
         headers: { Authorization: `Bearer ${auth.getToken()}` },
       }).then((response) => {
         dispatch(channelsActions.setAll(response.data.channels));
         dispatch(messagesActions.setAll(response.data.messages));
       }).catch((e) => {
-        if (e.code === 'ERR_BAD_REQUEST') {
-          if (e.response.status === 401) {
+        switch (e.response?.status) {
+          case 401:
             auth.logOut();
-          }
-        }
-        if (e.code === 'ERR_NETWORK') {
-          notifyError(t('notify.serverError'));
+            break;
+          default:
+            notifyError(t('notify.serverError'));
         }
       });
     } else {
@@ -56,11 +55,11 @@ const MainPage = () => {
   }, [navigate, dispatch, auth, t]);
 
   return (
-    <>
+    <div className="d-flex flex-column h-100">
       <Navbar />
-      <Container className="h-100 overflow-hidden shadow-sm my-3">
+      <Container className="h-100 shadow-sm my-3 overflow-auto">
         <Row className="justify-content-center align-items-center h-100 shadow">
-          <Col xs={4} md={2} className="bg-light shadow h-100 d-flex flex-column">
+          <Col xs={4} md={3} className="bg-light shadow h-100 d-flex flex-column">
             <ChannelBox currentChannelId={currentChannelId} />
           </Col>
           <Col className="h-100 p-0">
@@ -78,7 +77,7 @@ const MainPage = () => {
           </Col>
         </Row>
       </Container>
-    </>
+    </div>
   );
 };
 

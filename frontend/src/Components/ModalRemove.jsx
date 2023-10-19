@@ -3,15 +3,15 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { closeModals } from '../slices/modalSlice';
+import { close } from '../slices/modalSlice';
 import { emits } from '../socket';
 
 const ModalRemove = ({ props: { choosenChannel } }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const isShow = useSelector((state) => state.modals.removeChannel);
-  const handleClose = () => dispatch(closeModals());
+  const isShow = useSelector((state) => state.modals.show) === 'modalRemove';
+  const handleClose = () => dispatch(close());
   const handleClickRemove = () => {
     handleClose();
     const { id } = choosenChannel;

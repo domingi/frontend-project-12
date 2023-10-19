@@ -33,7 +33,7 @@ const SignupForm = () => {
       validateOnChange={false}
       onSubmit={(values) => {
         setFetched(true);
-        axios.post('/api/v1/signup', values)
+        axios.post(pathes.api.signup, values)
           .then((response) => {
             const { token } = response.data;
             const { username } = values;
@@ -44,11 +44,12 @@ const SignupForm = () => {
           })
           .catch((e) => {
             setFetched(false);
-            if (e.code === 'ERR_BAD_REQUEST') {
-              setValidated(false);
-            }
-            if (e.code === 'ERR_NETWORK') {
-              notifyError(t('notify.serverError'));
+            switch (e.response?.status) {
+              case 409:
+                setValidated(false);
+                break;
+              default:
+                notifyError(t('notify.serverError'));
             }
           });
       }}
@@ -131,9 +132,11 @@ const SignupForm = () => {
 const BuildPage = () => (
   <>
     <Navbar />
-    <Card>
-      <SignupForm />
-    </Card>
+    <div className="d-flex justify-content-center align-items-center h-100">
+      <Card>
+        <SignupForm />
+      </Card>
+    </div>
   </>
 );
 
