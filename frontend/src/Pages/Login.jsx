@@ -17,7 +17,6 @@ const RegistrationForm = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isValidated, setValidated] = useState(true);
-  const [isFetched, setFetched] = useState(false);
   const auth = useContext(AuthContext);
 
   const LoginSchema = Yup.object().shape({
@@ -29,19 +28,17 @@ const RegistrationForm = () => {
     <Formik
       validationSchema={LoginSchema}
       validateOnChange={false}
-      onSubmit={(values) => {
-        setFetched(true);
+      onSubmit={(values, { setSubmitting }) => {
         axios.post(pathes.api.login, values)
           .then((response) => {
             const { token } = response.data;
             const { username } = values;
             auth.logIn(username, token);
             setValidated(true);
-            setFetched(false);
             navigate(pathes.main);
           })
           .catch((e) => {
-            setFetched(false);
+            setSubmitting(false);
             switch (e.response?.status) {
               case 401:
                 setValidated(false);
@@ -57,7 +54,7 @@ const RegistrationForm = () => {
       }}
     >
       {({
-        handleSubmit, handleChange, values, errors, validateField,
+        handleSubmit, handleChange, values, errors, validateField, isSubmitting,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
@@ -91,7 +88,7 @@ const RegistrationForm = () => {
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.password}</Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100" disabled={isFetched}>
+          <Button variant="primary" type="submit" className="w-100" disabled={isSubmitting}>
             {t('login.title')}
           </Button>
           {!isValidated

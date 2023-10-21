@@ -19,7 +19,6 @@ const SignupForm = () => {
   const { t } = useTranslation();
 
   const [isValidated, setValidated] = useState(true);
-  const [isFetched, setFetched] = useState(false);
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string().required(t('errors.required')).min(3, t('errors.nameLength')).max(20, t('errors.nameLength')),
@@ -31,19 +30,17 @@ const SignupForm = () => {
     <Formik
       validationSchema={SignupSchema}
       validateOnChange={false}
-      onSubmit={(values) => {
-        setFetched(true);
+      onSubmit={(values, { setSubmitting }) => {
         axios.post(pathes.api.signup, values)
           .then((response) => {
             const { token } = response.data;
             const { username } = values;
             auth.logIn(username, token);
             setValidated(true);
-            setFetched(false);
             navigate(pathes.main);
           })
           .catch((e) => {
-            setFetched(false);
+            setSubmitting(false);
             switch (e.response?.status) {
               case 409:
                 setValidated(false);
@@ -60,7 +57,7 @@ const SignupForm = () => {
       }}
     >
       {({
-        handleSubmit, handleChange, values, errors, validateField,
+        handleSubmit, handleChange, values, errors, validateField, isSubmitting,
       }) => (
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
@@ -114,7 +111,7 @@ const SignupForm = () => {
             />
             <Form.Control.Feedback type="invalid" className="d-flex justify-content-left">{errors.confirmPassword}</Form.Control.Feedback>
           </Form.Group>
-          <Button variant="primary" type="submit" className="w-100" disabled={isFetched}>
+          <Button variant="primary" type="submit" className="w-100" disabled={isSubmitting}>
             {t('signup.button')}
           </Button>
           {!isValidated

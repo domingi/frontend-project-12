@@ -5,7 +5,7 @@ import pathes from '../routes/index';
 const CardLogin = ({ children }) => {
   const { t } = useTranslation();
   return (
-    <div className="card-block-container">
+    <div className="card-block-container mx-1">
       <div className="card mb-3 shadow-sm text-center">
         <div className="row g-0 p-3">
           <div className="col-md-6 d-flex align-items-center justify-content-center">
