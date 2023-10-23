@@ -20,7 +20,6 @@ const ModalNewChannel = ({ props: { сhannelSchema, channelWindow } }) => {
     <Modal show={isShow} onHide={handleClose}>
       <Formik
         validationSchema={сhannelSchema}
-        validateOnChange={false}
         onSubmit={(values) => {
           handleClose();
           const channel = { name: values.channel, removable: true };

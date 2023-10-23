@@ -10,10 +10,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import { actions as channelsActions, selectors } from '../slices/channelSlice';
 import { actions as messagesActions } from '../slices/messagesSlice';
-import { Chat, MessageInput } from '../Components/Chatbox';
+import { Chat, MessageInput } from '../Components/ChatBox';
 import AuthContext from '../contexts';
 import ChannelBox from '../Components/ChannelBox';
-import { notifyError } from '../Components/notifications';
+import { notifyError } from '../notifications';
 import Navbar from '../Components/Navbar';
 import pathes from '../routes/index';
 

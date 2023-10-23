@@ -9,7 +9,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../contexts';
 import Card from '../Components/CardSignup';
-import { notifyError } from '../Components/notifications';
+import { notifyError } from '../notifications';
 import Navbar from '../Components/Navbar';
 import pathes from '../routes/index';
 

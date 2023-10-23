@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 import i18n from 'i18next';
-import { notifyError, notifySucces } from './Components/notifications';
+import { notifyError, notifySucces } from './notifications';
 import { actions as channelsActions } from './slices/channelSlice';
 import { actions as messagesActions } from './slices/messagesSlice';
 import store from './slices/index';

@@ -26,7 +26,6 @@ const ModalRename = ({ props: { сhannelSchema, choosenChannel } }) => {
     <Modal show={isShow} onHide={handleClose}>
       <Formik
         validationSchema={сhannelSchema}
-        validateOnChange={false}
         onSubmit={(values) => {
           handleClose();
           const { id } = choosenChannel;

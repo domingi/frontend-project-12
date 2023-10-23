@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../Components/CardLogin';
-import { notifyError } from '../Components/notifications';
+import { notifyError } from '../notifications';
 import Navbar from '../Components/Navbar';
 import AuthContext from '../contexts';
 import pathes from '../routes/index';
